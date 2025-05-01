@@ -1,0 +1,92 @@
+import { React, useState } from 'react'
+import firebase from './firebase'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+export default function Teams() {
+  const realtimefirebasedb = firebase.database()
+  const [allteams, setallteams] = useState([])
+  const [teamname, setteamname] = useState()
+  const [newplayer, setnewplayer] = useState('')
+  const [playerlist, setplayerslist] = useState([])
+
+  function addplayer() {
+    setplayerslist([...playerlist, newplayer])
+    setnewplayer('')
+  }
+
+  function deletetask(index) {
+    var duplicate = [...playerlist]
+    duplicate.splice(index, 1)
+    setplayerslist(duplicate)
+  }
+
+  var duplicate = [...allteams]
+  function savedata() {
+    var TeamData =
+    {
+      dbplayerslist: playerlist,
+      dbteamname: teamname
+    }
+    duplicate.push(teamname)
+
+    realtimefirebasedb.ref(teamname).set(TeamData).then(() => {
+      setallteams(prev => [...prev, teamname])
+      alert('Team saved successfully!');
+      setnewplayer('');
+      setplayerslist([]);
+    }).catch(err => { console.error(err); alert('Error saving team: ' + err.message); });
+  }
+
+  function TeamsDone() {
+
+    const newTeam = teamname.trim();
+
+
+    realtimefirebasedb.ref('DBteams').once('value')
+      .then(snapshot => {
+        const existingTeams = snapshot.val() || [];
+        const updatedTeams = [...existingTeams, newTeam];
+        return realtimefirebasedb.ref('DBteams').set(updatedTeams)
+          .then(() => updatedTeams);
+      })
+      .then(updatedList => {
+        setallteams(updatedList);
+        setteamname('');
+        setnewplayer('');
+        setplayerslist([]);
+        alert('Team added to DBteams successfully!');
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error writing DBteams: ' + err.message);
+      });
+  }
+
+
+  const playerstable = playerlist.map((object, index) => {
+    return <div className='row justify-content-center'>
+
+      <h5 className='col-md-6 text-left'>{object}</h5>
+      <button onClick={() => { deletetask(index) }} className='col-md-1 btn btn-danger' id='danger'>Delete</button>
+    </div>
+
+  })
+  return (
+    <div>
+      <div className="row justify-content-center ">
+        <div className='col-md-2' id='inp'>
+          <input type="text" id='team1' className='form-control col-md-2' placeholder='Team Name'
+            value={teamname} onChange={(e) => { setteamname(e.target.value) }} />
+          <input type="text" id='players1' placeholder='Players' className='form-control col-md-4'
+            value={newplayer} onChange={(e) => { setnewplayer(e.target.value) }} />
+        </div>
+        <button onClick={addplayer} className='btn btn-success col-md-1' id='addbutton'>ADD</button>
+      </div>
+      <br /><br /><br />
+      <button onClick={savedata} className='btn btn-success col-md-1' id='save'>SAVE</button>
+      <button onClick={TeamsDone} className='btn btn-success col-md-1' id='done'>Done</button>
+      {playerstable}
+    </div>
+  )
+}
