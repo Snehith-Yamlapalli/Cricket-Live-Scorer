@@ -1,6 +1,5 @@
 .App {
   text-align: center;
-  
 }
 
 .App-logo {
@@ -42,96 +41,24 @@
   height: 70px;
   font-size: 40px;
 }
-#myicon {
-  width: 60px;          /* shrink it */
-  height: 40px;         /* keep aspect ratio */
-  position:absolute;   /* for free positioning */
-  top: 15px;            /* 20px down from the top of its nearest positioned ancestor */
-  right: 530px;          /* 30px in from the right */
+input{
+  margin-top: 20px !important;
+  border: 2px solid black !important;
 }
-.nav-links 
-{
-  background-color:rgb(237, 162, 100);
-  display: flex;
+#teams{
+  background-color: chartreuse;
+  height: 100px;
+}
+#names{
+  color: rgb(28, 143, 10);
   font-size: 18px;
-  list-style: none;
-  text-align: center;
-  padding-top: 5px;
-  padding-left: 10;
-  padding-right: 10;
-  margin: 10;
-  height: 40px;
+  font-weight: bold;
 }
-
-.nav-links li {
-  margin-right: 20px;
+.custom-margin {
+  margin-bottom: 20px; /* Adjust as needed */
 }
-#addbutton1{
-  position: absolute;
-  left: 630px;
-  top: 180px;
-  height: 40px;
-}
-#addbutton2{
-  position: absolute;
-  left: 1130px;
-  top: 180px;
-  height: 40px;
-}
-#danger{
-  height: 35px;
-  width: 80px;
-  padding-bottom: 5px;
-}
-
-#save1{
-  position: absolute;
-  bottom: 10px;
-  left: 350px;
-}
-#save2{
-  position: absolute;
-  bottom: 10px;
-  left: 850px;
-}
-#done{
-  position: absolute;
-  bottom: 50px;
-  left: 1400px;
-}
-#team1{
-  position: absolute;
-  left: 300px;
-  top: 130px;
-  width: 300px;
-}
-#team2{
-  position: absolute;
-  left: 800px;
-  top: 130px;
-  width: 300px;
-}
-#players1{
-  position: absolute;
-  left: 300px;
-  top: 180px;
-  width: 300px;
-}
-#players2{
-  position: absolute;
-  left: 800px;
-  top: 180px;
-  width: 300px;
-}
-#table1{
-  position: absolute;
-  left: 250px;
-  top: 250px;
-  width: 400px;
-}
-#table2{
-  position: absolute;
-  left: 750px;
-  top: 250px;
-  width: 400px;
+.run-btn{
+  margin-right: 10px;
+  padding: 0;
+  cursor: 'pointer'
 }

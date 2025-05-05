@@ -1,0 +1,80 @@
+import './App.css';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import BBL from './BBL';
+import Home from './Home';
+function App() {
+  
+
+  return (
+    <div className="App">
+      
+      <h1 id='head'>Cric App</h1>
+      <Router>
+        <div className="App">
+          <nav>
+            <ul className="nav-links">
+              <li>
+                <NavLink to="/Home" end style={({ isActive }) => ({ color: isActive ? 'red' : 'blue' })}>
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/BBL" end style={({ isActive }) => ({ color: isActive ? 'red' : 'blue' })}>
+                  BBL
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path="/Home" element ={<Home/>}/>
+            <Route path="/BBL" element={<BBL/>} />
+          </Routes>
+        </div>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+
+<div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
+        <table className="table">
+          <thead>
+            <tr>
+            <td><h3>{striker}</h3></td>
+            <td><h4>{strikerruns} </h4></td>
+            <td><h4>{strikerballs} </h4></td>
+            <td><h4>{strikerfours} </h4></td>
+            <td><h4>{strikersixes} </h4></td>
+            <td><h4>{strikerruns/strikerballs} </h4></td>
+            </tr>
+          </thead>
+        </table>
+        <div className='table'>
+          <thead>
+          <tr >
+            <td><h3>{nonstriker}</h3></td>
+            <td><h4>{nonstrikerruns} </h4></td>
+            <td><h4>{nonstrikerballs} </h4></td>
+            <td><h4>{nonstrikerfours} </h4></td>
+            <td><h4>{nonstrikersixes} </h4></td>
+            <td><h4>{nonstrikerruns/nonstrikerballs} </h4></td>
+          </tr>
+          </thead>
+
+          const [strikerruns, setstrikerruns] = useState(0)
+  const [strikerballs, setstrikerballs] = useState(0)
+  const [strikerfours, setstrikerfours] = useState(0)
+  const [strikersixes, setstrikersixes] = useState(0)
+  const [nonstrikerruns, setnonstrikerruns] = useState(0)
+  const [nonstrikerballs, setnonstrikerballs] = useState(0)
+  const [nonstrikerfours, setnonstrikerfours] = useState(0)
+  const [nonstrikersixes, setnonstrikersixes] = useState(0)
+  const [teamruns, setteamruns] = useState(0)
+  const [wickets, setwickets] = useState(0)
+  const [bowlerruns, setbowlerruns] = useState(0)
+  const [overs, setovers] = useState(0)
+
+  style={{ backgroundColor: !tag ? '#d4edda' : 'transparent', color: !tag ? 'red' : 'inherit', fontWeight: !tag ? 'bold' : '' }}
+  style={{ backgroundColor: tag ? '#d4edda' : 'transparent', color: tag ? 'red' : 'inherit', fontWeight: 'bold' }}
