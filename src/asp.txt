@@ -6,7 +6,7 @@ export default function Scorecard() {
   const navigate = useNavigate();
   const firebaserealtimedb = firebase.database()
   const location = useLocation();
-  const { hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls ,teamruns:newteamruns} = location.state || {};
+  const { hostteam, visitteam, over, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: outbowler } = location.state || {};
 
   var [strikerruns, setstrikerruns] = useState(0)
   var [strikerballs, setstrikerballs] = useState(0)
@@ -18,31 +18,22 @@ export default function Scorecard() {
   const [nonstrikerfours, setnonstrikerfours] = useState(0)
   const [nonstrikersixes, setnonstrikersixes] = useState(0)
 
-  const [bowlerballs, setbowerballs] = useState(newBowlerBalls ?? 0)
+  const [bowlerballs, setbowerballs] = useState(0)
   const [bowlerovers, setbowlerovers] = useState(0)
   const [bowlermaiden, setbowlermaiden] = useState(0)
   const [bowlerruns, setbowlerruns] = useState(0)
   const [bowlerwickets, setbowlerwickets] = useState(0)
 
-  const [teamruns, setteamruns] = useState(newteamruns ?? 0)
+  const [teamruns, setteamruns] = useState(0)
   const [teamwickets, setteamwickets] = useState(0)
   const [Teamovers, setTeamovers] = useState(0)
   const [tag, settag] = useState(incomingTag ?? true)
   const [Innings, setInnings] = useState(1)
-  const [val, setval] = useState()
-  const [lastrun,setlastrun] = useState(0)
-  
-
 
   const Key = `Innings${Innings}`
   const matchid = hostteam + 'vs' + visitteam
-  function swapbatsman() {
-    settag(prev => !prev)
-  }
   useEffect(() => {
-    if (bowlerballs === 0 || val === 'W') // if a wicket falls down
-    {
-      if(lastrun ===1)swapbatsman()
+    if (bowlerballs === 0) {
       firebaserealtimedb.ref(`${matchid}/${Key}/batsmen/${striker}`)
         .once('value')
         .then(snap => {
@@ -74,7 +65,6 @@ export default function Scorecard() {
             setbowlerovers(d.overs ?? 0)
             setbowlerwickets(d.wickets ?? 0)
             setbowlermaiden(d.maidens ?? 0)
-            setbowerballs(d.balls ?? 0)
           }
         })
       firebaserealtimedb.ref(`${matchid}/${Key}`)
@@ -89,125 +79,167 @@ export default function Scorecard() {
         })
       settag(curr => !curr);
     }
+
+    if (bowlerballs === 6) {
+      const newTeamOvers = Teamovers + 1; // Calculate new Teamovers
+      const newBowlerOvers = bowlerovers + 1; // Calculate new Bowlerovers
+
+      setTeamovers(newTeamOvers);
+      setbowerballs(0);
+      setbowlerovers(newBowlerOvers);
+
+      alert(`teamovers ${Teamovers} || bowlerballs ${bowlerballs} || bowlerovers ${bowlerovers}`)
+      const full = Math.floor(bowlerballs / 6)
+      const balls = bowlerballs % 6
+      setTeamovers(`${full}.${balls}`)
+
+      const updates =
+      {
+        [`${Key}/Totalteamruns`]: teamruns,
+        [`${Key}/Totalteamwickets`]: teamwickets,
+        [`${Key}/Totalteamovers`]: newTeamOvers,
+
+        [`${Key}/batsmen/${striker}`]: {
+          runs: strikerruns,
+          balls: strikerballs,
+          fours: strikerfours,
+          sixes: strikersixes
+        },
+        [`${Key}/batsmen/${nonstriker}`]: {
+          runs: nonstrikerruns,
+          balls: nonstrikerballs,
+          fours: nonstrikerfours,
+          sixes: nonstrikersixes
+        },
+
+        [`${Key}/bowlers/${bowler}`]: {
+          runs: bowlerruns,
+          overs: newBowlerOvers,
+          wickets: bowlerwickets,
+          maidens: bowlermaiden
+        }
+      }
+
+
+      firebaserealtimedb
+        .ref(`${matchid}`)
+        .update(updates)
+        .then(() => {
+          navigate('/newbowler', {
+            state: { matchid, hostteam, visitteam, over, striker, nonstriker, bowler, tag }
+          })
+        })
+        .catch(err => console.error(err))
+    }
+
   }, [bowlerballs, bowlerruns]);
 
 
-
-  function updatescore(val) {
-    if (val === 'W') {
-      const oldbowwick = bowlerwickets
-      const newbowlwick = oldbowwick + 1
-      const oldteamwick = teamwickets
-      const newteamwick = oldteamwick + 1
-      setteamwickets(newteamwick)
-      setbowlerwickets(newbowlwick)
-      const wicketUpdates = {
-        [`${Key}/Totalteamwickets`]: teamwickets + 1,
-        [`${Key}/batsmen/${striker}/balls`]: strikerballs + (tag ? 1 : 0),
-        [`${Key}/batsmen/${nonstriker}/balls`]: nonstrikerballs + (!tag ? 1 : 0),
-        [`${Key}/bowlers/${bowler}`]: {
-          runs: bowlerruns + 0,
-          overs: bowlerovers,
-          balls: bowlerballs + 1 === 6 ? 0 : bowlerballs + 1,
-          wickets: bowlerwickets + 1,
-          maidens: bowlermaiden
-        }
-      };
-
-      firebaserealtimedb
-        .ref(matchid)
-        .update(wicketUpdates)
-        .catch(err => console.error(err))
-      navigate('/NewBatsman', {
-        state: { hostteam, visitteam, overs: Teamovers, striker, nonstriker, bowler, tag, bowlerballs,teamruns }
-      })
-      return
-    }
-    const prevBowlerBalls = bowlerballs
-    const newBowlerBalls = prevBowlerBalls + 1
+  function updatescore(val) 
+  {
     if (val % 2 === 1) {
-
-      settag(prev => !prev)
+      settag(curr => !curr);
     }
-
-    if (tag) {
-      setstrikerruns(r => r + val)
-      if (val === 4) setstrikerfours(f => f + 1)
-      if (val === 6) setstrikersixes(s => s + 1)
-      setstrikerballs(b => b + 1)
+    if (tag) 
+    {
+      if (val !== 'W')setstrikerruns(r => r + val);
+      if (val === 4) setstrikerfours(f => f + 1);
+      if (val === 6) setstrikersixes(s => s + 1);
+      setstrikerballs(b => b + 1);
     } else {
-      setnonstrikerruns(r => r + val)
-      if (val === 4) setnonstrikerfours(f => f + 1)
-      if (val === 6) setnonstrikersixes(s => s + 1)
-      setnonstrikerballs(b => b + 1)
+      if (val !== 'W')setnonstrikerruns(r => r + val);
+      if (val === 4) setnonstrikerfours(f => f + 1);
+      if (val === 6) setnonstrikersixes(s => s + 1);
+      setnonstrikerballs(b => b + 1);
     }
+    if (val !== 'W') {
+      setbowlerruns(r => r + val);
+      setteamruns(r => r + val);
+    }
+    setTeamovers(o => {
+      const overs = Math.floor(bowlerballs / 6); // Full overs
+      const balls = bowlerballs % 6; // Remaining balls
+      return parseFloat(`${Teamovers}.${balls}`);
+    });
 
-    setteamruns(r => r + val)
-    setteamwickets(w => w + (val === 'W' ? 1 : 0))
-    const fullOvers = Math.floor(newBowlerBalls / 6)
-    const nextBowlerOvers = fullOvers
+    setbowerballs(prevBalls => {
+      const newBalls = prevBalls + 1;
+      const fullOvers = Math.floor(newBalls / 6);
+      const ballsInCurrent = newBalls % 6;
+      const oversDecimal = fullOvers + ballsInCurrent / 10;
 
-    setbowerballs(newBowlerBalls)
-    setbowlerovers(nextBowlerOvers)
-    setbowlerruns(r => r + val)
-
-    const updates = {
-      [`${Key}/Totalteamruns`]: teamruns + (val !== 'W' ? val : 0),
-      [`${Key}/Totalteamwickets`]: teamwickets + (val === 'W' ? 1 : 0),
-      [`${Key}/Totalteamovers`]: Teamovers + (newBowlerBalls === 6 ? 1 : 0),
-      [`${Key}/batsmen/${striker}`]: {
-        runs: strikerruns + (tag ? (val !== 'W' ? val : 0) : 0),
-        balls: strikerballs + (tag ? 1 : 0),
-        fours: strikerfours + (tag && val === 4 ? 1 : 0),
-        sixes: strikersixes + (tag && val === 6 ? 1 : 0)
-      },
-      [`${Key}/batsmen/${nonstriker}`]: {
-        runs: nonstrikerruns + (!tag ? (val !== 'W' ? val : 0) : 0),
-        balls: nonstrikerballs + (!tag ? 1 : 0),
-        fours: nonstrikerfours + (!tag && val === 4 ? 1 : 0),
-        sixes: nonstrikersixes + (!tag && val === 6 ? 1 : 0)
-      },
-      [`${Key}/bowlers/${bowler}`]: {
-        runs: bowlerruns + (val !== 'W' ? val : 0),
-        overs: bowlerovers + (newBowlerBalls === 6 ? 1 : 0),
-        balls: newBowlerBalls === 6 ? 0 : newBowlerBalls,
-        wickets: bowlerwickets,
-        maidens: bowlermaiden
+      setTeamovers(oversDecimal);
+      return newBalls;
+    });
+    if (val === 'W') 
+      {
+        const bwickets = bowlerwickets + 1;
+        const twickets = teamwickets + 1;
+        setbowlerwickets(bwickets);
+        setteamwickets(twickets);
+        const updates =
+        {
+          [`${Key}/Totalteamruns`]: teamruns,
+          [`${Key}/Totalteamwickets`]: teamwickets,
+          [`${Key}/Totalteamovers`]: Teamovers,
+  
+          [`${Key}/batsmen/${striker}`]: {
+            runs: strikerruns,
+            balls: strikerballs,
+            fours: strikerfours,
+            sixes: strikersixes
+          },
+          [`${Key}/batsmen/${nonstriker}`]: {
+            runs: nonstrikerruns,
+            balls: nonstrikerballs,
+            fours: nonstrikerfours,
+            sixes: nonstrikersixes
+          },
+  
+          [`${Key}/bowlers/${bowler}`]: {
+            runs: bowlerruns,
+            overs: bowlerovers,
+            wickets: bowlerwickets,
+            maidens: bowlermaiden
+          }
+        }
+  
+        firebaserealtimedb
+          .ref(`${matchid}`)
+          .update(updates)
+          .catch(err => console.error(err))
+  
+        setbowerballs(prevBalls => {
+          const newBalls = prevBalls + 1;
+          const fullOvers = Math.floor(newBalls / 6);
+          const ballsInCurrent = newBalls % 6;
+          const oversDecimal = fullOvers + ballsInCurrent / 10;
+  
+          setTeamovers(oversDecimal);
+          return newBalls;
+        });
+  
+        navigate('/NewBatsman', {
+          state: { hostteam, visitteam, over, striker, nonstriker, bowler, tag, bowlerballs }
+        })
       }
-    }
-    firebaserealtimedb
-      .ref(matchid)
-      .update(updates)
-      .catch(err => console.error(err))
-
-    if (newBowlerBalls === 6) {
-      const prevteamovers = Teamovers;
-      const newteamovers = prevteamovers + 1
-      setTeamovers(newteamovers)
-      navigate('/newbowler', {
-        state: { hostteam, visitteam, overs, striker, nonstriker, bowler, tag,newteamovers ,teamruns}
-      })
-    }
   }
-
 
   return (
     <div className='row justify-content-center'>
-      <div id='teams1' className='row justify-content-center '>
-        <div className='col-md-2' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <h3>{hostteam}</h3>
-          <h5><span>Vs</span></h5>
-          <h3>{visitteam}</h3>
+      <div id='teams' className='row justify-content-center '>
+        <div className='col-md-4' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <input type="text" className="form-control" value={hostteam} readOnly placeholder="Host name" />
+          <span>Vs</span>
+          <input type="text" className="form-control" value={visitteam} readOnly placeholder="Visit name" />
         </div>
       </div>
 
       <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '30px' }}>{hostteam}</h3>
-          <h3>{teamruns}</h3><h2>-</h2><h3>{teamwickets}</h3><h2>(</h2><h3>{Teamovers}</h3><h1>.</h1><h3>{bowlerballs}</h3><h2>)</h2>
+        <div><h3>{hostteam} Innings</h3> </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3>{teamruns}</h3> <h2>-</h2> <h3>{teamwickets}</h3> <h2>(</h2> <h3>{Teamovers}</h3> <h2>)</h2>
         </div>
-
       </div>
 
       <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
@@ -269,23 +301,14 @@ export default function Scorecard() {
         </table>
       </div>
       <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-      <h5>This Over</h5>
-      </div>
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
+        <h4>sgfdg</h4>
         <input type="button" className="btn btn-primary me-2" value="0" onClick={() => updatescore(0)} />
         <input type="button" className="btn btn-primary me-2" value="1" onClick={() => updatescore(1)} />
         <input type="button" className="btn btn-primary me-2" value="2" onClick={() => updatescore(2)} />
         <input type="button" className="btn btn-primary me-2" value="3" onClick={() => updatescore(3)} />
         <input type="button" className="btn btn-primary me-2" value="4" onClick={() => updatescore(4)} />
         <input type="button" className="btn btn-primary me-2" value="6" onClick={() => updatescore(6)} />
-        <input type="button" className='btn btn-primary me-2' value="SwapBatsman" onClick={() => swapbatsman()} /> <br />
-        <input type="button" className="btn btn-primary me-2" value="W" onClick={() => updatescore('W')} />
-        <input type="button" className='btn btn-primary me-2' value="Wide" onClick={() => swapbatsman()} />
-        <input type="button" className='btn btn-primary me-2' value="No-Ball" onClick={() => swapbatsman()} />
-        <input type="button" className='btn btn-primary me-2' value="Byes" onClick={() => swapbatsman()} />
-        <input type="button" className='btn btn-primary me-2' value="Leg Byes" onClick={() => swapbatsman()} />
-
-        
+        <input type="button" className="btn btn-primary" value="W" onClick={() => updatescore('W')} />
 
       </div>
     </div>

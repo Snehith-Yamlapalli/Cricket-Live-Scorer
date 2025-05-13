@@ -13,7 +13,7 @@ export default function BBL()
   
   function Startmatch() {
     navigate('/scorecard', {
-      state: { hostteam, visitteam, overs  ,striker, nonstriker, bowler }
+      state: { hostteam, visitteam, overs ,striker, nonstriker, bowler }
     });
   }
 

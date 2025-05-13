@@ -49,6 +49,10 @@ input{
   background-color: chartreuse;
   height: 100px;
 }
+#teams1{
+  background-color: chartreuse;
+  height: 70px;
+}
 #names{
   color: rgb(28, 143, 10);
   font-size: 18px;

@@ -2,12 +2,12 @@ import { React, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import firebase from './firebase';
 
-export default function Scorecard() {
+export default function Target() {
   const navigate = useNavigate();
   const firebaserealtimedb = firebase.database()
   const location = useLocation();
-  const { hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls ,teamruns:newteamruns} = location.state || {};
-
+  const { hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls,targetruns } = location.state || {};
+           
   var [strikerruns, setstrikerruns] = useState(0)
   var [strikerballs, setstrikerballs] = useState(0)
   var [strikerfours, setstrikerfours] = useState(0)
@@ -24,11 +24,11 @@ export default function Scorecard() {
   const [bowlerruns, setbowlerruns] = useState(0)
   const [bowlerwickets, setbowlerwickets] = useState(0)
 
-  const [teamruns, setteamruns] = useState(newteamruns ?? 0)
+  const [teamruns, setteamruns] = useState(0)
   const [teamwickets, setteamwickets] = useState(0)
   const [Teamovers, setTeamovers] = useState(0)
   const [tag, settag] = useState(incomingTag ?? true)
-  const [Innings, setInnings] = useState(1)
+  const [Innings, setInnings] = useState(2)
   const [val, setval] = useState()
   const [lastrun,setlastrun] = useState(0)
   
@@ -119,14 +119,13 @@ export default function Scorecard() {
         .update(wicketUpdates)
         .catch(err => console.error(err))
       navigate('/NewBatsman', {
-        state: { hostteam, visitteam, overs: Teamovers, striker, nonstriker, bowler, tag, bowlerballs,teamruns }
+        state: { hostteam, visitteam, over: Teamovers, striker, nonstriker, bowler, tag, bowlerballs }
       })
       return
     }
     const prevBowlerBalls = bowlerballs
     const newBowlerBalls = prevBowlerBalls + 1
     if (val % 2 === 1) {
-
       settag(prev => !prev)
     }
 
@@ -185,7 +184,7 @@ export default function Scorecard() {
       const newteamovers = prevteamovers + 1
       setTeamovers(newteamovers)
       navigate('/newbowler', {
-        state: { hostteam, visitteam, overs, striker, nonstriker, bowler, tag,newteamovers ,teamruns}
+        state: { matchid, hostteam, visitteam, overs, striker, nonstriker, bowler, tag ,newteamovers}
       })
     }
   }
@@ -200,94 +199,7 @@ export default function Scorecard() {
           <h3>{visitteam}</h3>
         </div>
       </div>
-
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '30px' }}>{hostteam}</h3>
-          <h3>{teamruns}</h3><h2>-</h2><h3>{teamwickets}</h3><h2>(</h2><h3>{Teamovers}</h3><h1>.</h1><h3>{bowlerballs}</h3><h2>)</h2>
-        </div>
-
-      </div>
-
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Batsman</th>
-              <th>R</th>
-              <th>B</th>
-              <th>4s</th>
-              <th>6s</th>
-              <th>SR</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ backgroundColor: tag ? '#d4edda' : 'transparent', color: tag ? 'red' : 'inherit', fontWeight: 'bold' }}>
-                {striker}
-              </td>
-              <td>{strikerruns}</td>
-              <td>{strikerballs}</td>
-              <td>{strikerfours}</td>
-              <td>{strikersixes}</td>
-              <td>{strikerballs ? ((strikerruns / strikerballs) * 100).toFixed(2) : '0.00'}</td>
-            </tr>
-            <tr>
-              <td style={{ backgroundColor: !tag ? '#d4edda' : 'transparent', color: !tag ? 'red' : 'inherit', fontWeight: !tag ? 'bold' : '' }}>
-                {nonstriker}</td>
-              <td>{nonstrikerruns}</td>
-              <td>{nonstrikerballs}</td>
-              <td>{nonstrikerfours}</td>
-              <td>{nonstrikersixes}</td>
-              <td>{nonstrikerballs ? ((nonstrikerruns / nonstrikerballs) * 100).toFixed(2) : '0.00'}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Bowler</th>
-              <th>O</th>
-              <th>M</th>
-              <th>R</th>
-              <th>W</th>
-              <th>E</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{bowler}</td>
-              <td>{bowlerovers}{'.'}{bowlerballs}</td>
-              <td>{bowlermaiden}</td>
-              <td>{bowlerruns}</td>
-              <td>{bowlerwickets}</td>
-              <td>{(bowlerovers * 6 + bowlerovers) ? (bowlerruns / ((bowlerovers * 6 + bowlerballs) / 6)).toFixed(2) : '0.00'}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-      <h5>This Over</h5>
-      </div>
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-        <input type="button" className="btn btn-primary me-2" value="0" onClick={() => updatescore(0)} />
-        <input type="button" className="btn btn-primary me-2" value="1" onClick={() => updatescore(1)} />
-        <input type="button" className="btn btn-primary me-2" value="2" onClick={() => updatescore(2)} />
-        <input type="button" className="btn btn-primary me-2" value="3" onClick={() => updatescore(3)} />
-        <input type="button" className="btn btn-primary me-2" value="4" onClick={() => updatescore(4)} />
-        <input type="button" className="btn btn-primary me-2" value="6" onClick={() => updatescore(6)} />
-        <input type="button" className='btn btn-primary me-2' value="SwapBatsman" onClick={() => swapbatsman()} /> <br />
-        <input type="button" className="btn btn-primary me-2" value="W" onClick={() => updatescore('W')} />
-        <input type="button" className='btn btn-primary me-2' value="Wide" onClick={() => swapbatsman()} />
-        <input type="button" className='btn btn-primary me-2' value="No-Ball" onClick={() => swapbatsman()} />
-        <input type="button" className='btn btn-primary me-2' value="Byes" onClick={() => swapbatsman()} />
-        <input type="button" className='btn btn-primary me-2' value="Leg Byes" onClick={() => swapbatsman()} />
-
-        
-
-      </div>
+      <h1>{"Target is "}{targetruns}</h1>
     </div>
   );
 }

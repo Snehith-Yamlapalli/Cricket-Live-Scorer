@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function NewBatsman() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hostteam, visitteam, over, striker, nonstriker, bowler, tag } = location.state || {};
+  const { hostteam, visitteam, overs, striker, nonstriker, bowler, tag ,bowlerballs,teamruns} = location.state || {};
   const [newstriker, setnewstriker] = useState()
   const [newnonstriker, setnewnonstriker] = useState()
-  function Startmatch() {
+  const newBowlerBalls = bowlerballs + 1
+  const newteamruns = teamruns
+  function Startmatch() 
+  {
+    const bb = bowlerballs
+    const nbb = bb + 1
     if (tag) {
       if (!newstriker?.trim()) {
         alert('Please enter the new striker name');
         return;
       }
       navigate('/scorecard', {
-        state: { hostteam, visitteam, over, striker: newstriker.trim(), nonstriker, bowler }
+        state: { hostteam, visitteam, overs, striker: newstriker.trim(), nonstriker, bowler ,tag:tag ,bowlerballs:newBowlerBalls,teamruns:newteamruns}
       });
     }
     else {
@@ -23,7 +28,7 @@ export default function NewBatsman() {
         return;
       }
       navigate('/scorecard', {
-        state: { hostteam, visitteam, over, striker, nonstriker: newnonstriker.trim(), bowler }
+        state: { hostteam, visitteam, overs, striker, nonstriker: newnonstriker.trim(), bowler ,tag:tag,bowlerballs:newBowlerBalls,teamruns}
       });
     }
   }
