@@ -35,13 +35,22 @@ export default function Home() {
     firebaserealtimedb
       .ref(matchid)
       .update(updates)
+
     if (!hostteam || !visitteam || !overs || !tossWinner || !tossDecision) {
       alert('Please fill all fields and make your toss decision');
       return;
     }
+
+    const firstBattingTeam  = tossDecision === 'Batting'
+    ? tossWinner
+    : (tossWinner === hostteam ? visitteam : hostteam);
+
+  const secondBattingTeam = firstBattingTeam === hostteam
+    ? visitteam
+    : hostteam;
     
     navigate('/BBL', {
-      state: { innings, hostteam, visitteam, overs: parsedOver, tossWinner, choice: tossDecision }
+      state: { innings, hostteam:  firstBattingTeam, visitteam: secondBattingTeam, overs: parsedOver }
     });
   }
 

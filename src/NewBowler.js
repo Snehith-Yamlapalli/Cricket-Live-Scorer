@@ -4,19 +4,18 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function NewBowler() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { innings,hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
+    const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
     const [bowler, setnewbowler] = useState('');
     useEffect(() => {
-        if (newteamovers === overs) 
-        {
+        if (newteamovers === overs) {
             const newinnings = 2
             alert('innnigs over')
             const newteamruns = teamruns
             navigate('/BBL', {
-                state: { innings:newinnings,hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
+                state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
             })
         }
-    }, );
+    },);
 
     function Startmatch() {
         if (!bowler.trim()) {
@@ -24,7 +23,7 @@ export default function NewBowler() {
             return;
         }
         navigate('/scorecard', {
-            state: { innings,hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag }
+            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag }
         });
     }
     return (
@@ -38,10 +37,16 @@ export default function NewBowler() {
             </div>
 
             <div className="col-md-4 mt-2">
-                <h1> Batsmen </h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '150px' }}>
+                    <div><h1>Batting Team</h1></div>
+                    <div><h3>{innings === 1 ? hostteam : visitteam}</h3></div>
+                </div>
                 <input type="text" className='form-control' placeholder='Striker name' value={striker || ''} readOnly />
                 <input type="text" className='form-control' placeholder='Non-striker name' value={nonstriker || ''} readOnly />
-                <h1>New Bowler</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '150px' }}>
+                    <div><h1>New Bowler</h1></div>
+                    <div><h3>{innings === 2 ? hostteam : visitteam}</h3></div>
+                </div>
                 <input type="text" className='form-control' placeholder='Bowler name' value={bowler} onChange={(e) => setnewbowler(e.target.value)} required />
                 <input type="button" className="btn btn-primary" value="Done" onClick={Startmatch} />
             </div>

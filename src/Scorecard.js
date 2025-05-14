@@ -6,7 +6,7 @@ export default function Scorecard() {
   const navigate = useNavigate();
   const firebaserealtimedb = firebase.database()
   const location = useLocation();
-  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls, teamruns: newteamruns } = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls, teamruns: newteamruns,thisover:standbyover } = location.state || {};
 
   var [strikerruns, setstrikerruns] = useState(0)
   var [strikerballs, setstrikerballs] = useState(0)
@@ -29,6 +29,7 @@ export default function Scorecard() {
   const [Teamovers, setTeamovers] = useState(0)
   const [tag, settag] = useState(incomingTag ?? true)
   const [targetruns, settargetruns] = useState()
+  const [thisover, sethisover] = useState(standbyover ?? [])
   const Key = `Innings${innings}`
   const matchid = hostteam + 'vs' + visitteam
 
@@ -36,8 +37,7 @@ export default function Scorecard() {
     settag(prev => !prev)
   }
 
-  useEffect(() => 
-  {
+  useEffect(() => {
     firebaserealtimedb
       .ref(`${matchid}/${'Innings1'}/Totalteamruns`)
       .once('value')
@@ -47,23 +47,21 @@ export default function Scorecard() {
       })
       .catch(err => console.error(err))
 
-      if(innings===2 && teamruns>=(targetruns+1))
-    {
-      const winner = 'Bowling'
+    if (innings === 2 && teamruns >= (targetruns + 1)) {
+      const winner = visitteam
       alert('Match over!')
-      navigate('/Over',{
-        state: {matchid, winner }
+      navigate('/Over', {
+        state: { winner }
       })
     }
-    if(innings===2 && Teamovers===overs && teamruns<(targetruns+1))
-    {
-      const winner = 'Batting'
+    if (innings === 2 && Teamovers === overs && teamruns < (targetruns + 1)) {
+      const winner = hostteam
       alert('Match over!')
-      navigate('/Over',{
-        state: {matchid, winner }
+      navigate('/Over', {
+        state: { winner }
       })
     }
-  }, );
+  },);
 
 
   useEffect(() => {
@@ -113,11 +111,20 @@ export default function Scorecard() {
       })
   },);
 
-  function updatescore(val) {
+  function updatescore(val) 
+  {
+    if(val!=='W')
+    {
+      const updatedOver = [...thisover, String(val)];
+      sethisover(updatedOver);
+    }
     const prevBowlerBalls = bowlerballs
     const newBowlerBalls = prevBowlerBalls + 1
 
-    if (val === 'W') {
+    if (val === 'W') 
+      {
+        const updatedOver = [...thisover, val];
+        sethisover(updatedOver);
       const oldbowwick = bowlerwickets
       const newbowlwick = oldbowwick + 1
       const oldteamwick = teamwickets
@@ -142,7 +149,7 @@ export default function Scorecard() {
         .update(wicketUpdates)
         .catch(err => console.error(err))
       navigate('/NewBatsman', {
-        state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns }
+        state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns,thisover }
       })
     }
 
@@ -226,10 +233,9 @@ export default function Scorecard() {
         </div>
       </div>
 
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-
+      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(250, 128, 114)' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '30px' }}>{hostteam}</h3>
+          <h3 style={{ marginRight: '30px' }}>{innings === 1 ? hostteam : visitteam}</h3>
           <h3>{teamruns}</h3><h2>-</h2><h3>{teamwickets}</h3><h2>(</h2><h3>{Teamovers}</h3><h1>.</h1><h3>{bowlerballs}</h3><h2>)</h2>
           <h3 style={{ marginLeft: '150px' }}>{'Innings - '}{innings}</h3>
 
@@ -245,7 +251,7 @@ export default function Scorecard() {
           )}
           {innings === 2 && (
             <h3 style={{ marginLeft: '100px' }}>
-              target {targetruns+1}
+              target {targetruns + 1}
             </h3>
           )}
         </div>
@@ -305,15 +311,23 @@ export default function Scorecard() {
               <td>{bowlermaiden}</td>
               <td>{bowlerruns}</td>
               <td>{bowlerwickets}</td>
-              <td>{(bowlerovers * 6 + bowlerovers) ? (bowlerruns / ((bowlerovers * 6 + bowlerballs) / 6)).toFixed(2) : '0.00'}</td>
+              <td>{(bowlerballs || bowlerovers) > 0 ? (bowlerruns / (bowlerovers + bowlerballs / 6)).toFixed(2) : '0.00'}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-        <h5>This Over</h5>
+    <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'chartreuse' }}>
+        <div style={{ display: 'flex', alignItems: 'center',backgroundColor:'chartreuse' }}>
+          <h5 style={{ marginRight: '10px' }}>This Over:</h5>
+          <div  >
+            {thisover.map((ball, index) => (
+              <span key={index} style={{ marginRight: '8px',fontSize:'25px'}}>{ball}</span>
+            ))}
+          </div>
+        </div>
+
       </div>
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
+      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(235, 189, 152)' }}>
         <input type="button" className="btn btn-primary me-2" value="0" onClick={() => updatescore(0)} />
         <input type="button" className="btn btn-primary me-2" value="1" onClick={() => updatescore(1)} />
         <input type="button" className="btn btn-primary me-2" value="2" onClick={() => updatescore(2)} />

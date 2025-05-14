@@ -41,6 +41,9 @@
   height: 70px;
   font-size: 40px;
 }
+#TEL{
+  background-color: rgb(222, 108, 130);
+}
 input{
   margin-top: 20px !important;
   border: 2px solid black !important;
