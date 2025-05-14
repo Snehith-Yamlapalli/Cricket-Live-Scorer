@@ -6,7 +6,7 @@ export default function Scorecard() {
   const navigate = useNavigate();
   const firebaserealtimedb = firebase.database()
   const location = useLocation();
-  const { hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls ,teamruns:newteamruns} = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls, teamruns: newteamruns } = location.state || {};
 
   var [strikerruns, setstrikerruns] = useState(0)
   var [strikerballs, setstrikerballs] = useState(0)
@@ -28,72 +28,95 @@ export default function Scorecard() {
   const [teamwickets, setteamwickets] = useState(0)
   const [Teamovers, setTeamovers] = useState(0)
   const [tag, settag] = useState(incomingTag ?? true)
-  const [Innings, setInnings] = useState(1)
-  const [val, setval] = useState()
-  const [lastrun,setlastrun] = useState(0)
-  
-
-
-  const Key = `Innings${Innings}`
+  const [targetruns, settargetruns] = useState()
+  const Key = `Innings${innings}`
   const matchid = hostteam + 'vs' + visitteam
+
   function swapbatsman() {
     settag(prev => !prev)
   }
-  useEffect(() => {
-    if (bowlerballs === 0 || val === 'W') // if a wicket falls down
+
+  useEffect(() => 
+  {
+    firebaserealtimedb
+      .ref(`${matchid}/${'Innings1'}/Totalteamruns`)
+      .once('value')
+      .then(snap => {
+        const runs = snap.val() ?? 0
+        settargetruns(runs)
+      })
+      .catch(err => console.error(err))
+
+      if(innings===2 && teamruns>=(targetruns+1))
     {
-      if(lastrun ===1)swapbatsman()
-      firebaserealtimedb.ref(`${matchid}/${Key}/batsmen/${striker}`)
-        .once('value')
-        .then(snap => {
-          const d = snap.val()
-          if (d) {
-            setstrikerruns(d.runs ?? 0)
-            setstrikerballs(d.balls ?? 0)
-            setstrikerfours(d.fours ?? 0)
-            setstrikersixes(d.sixes ?? 0)
-          }
-        })
-      firebaserealtimedb.ref(`${matchid}/${Key}/batsmen/${nonstriker}`)
-        .once('value')
-        .then(snap => {
-          const d = snap.val()
-          if (d) {
-            setnonstrikerruns(d.runs ?? 0)
-            setnonstrikerballs(d.balls ?? 0)
-            setnonstrikerfours(d.fours ?? 0)
-            setnonstrikersixes(d.sixes ?? 0)
-          }
-        })
-      firebaserealtimedb.ref(`${matchid}/${Key}/bowlers/${bowler}`)
-        .once('value')
-        .then(snap => {
-          const d = snap.val()
-          if (d) {
-            setbowlerruns(d.runs ?? 0)
-            setbowlerovers(d.overs ?? 0)
-            setbowlerwickets(d.wickets ?? 0)
-            setbowlermaiden(d.maidens ?? 0)
-            setbowerballs(d.balls ?? 0)
-          }
-        })
-      firebaserealtimedb.ref(`${matchid}/${Key}`)
-        .once('value')
-        .then(snap => {
-          const d = snap.val()
-          if (d) {
-            setteamruns(d.Totalteamruns ?? 0)
-            setteamwickets(d.Totalteamwickets ?? 0)
-            setTeamovers(d.Totalteamovers ?? 0)
-          }
-        })
-      settag(curr => !curr);
+      const winner = 'Bowling'
+      alert('Match over!')
+      navigate('/Over',{
+        state: {matchid, winner }
+      })
     }
-  }, [bowlerballs, bowlerruns]);
+    if(innings===2 && Teamovers===overs && teamruns<(targetruns+1))
+    {
+      const winner = 'Batting'
+      alert('Match over!')
+      navigate('/Over',{
+        state: {matchid, winner }
+      })
+    }
+  }, );
 
 
+  useEffect(() => {
+    firebaserealtimedb.ref(`${matchid}/${Key}/batsmen/${striker}`)
+      .once('value')
+      .then(snap => {
+        const d = snap.val()
+        if (d) {
+          setstrikerruns(d.runs ?? 0)
+          setstrikerballs(d.balls ?? 0)
+          setstrikerfours(d.fours ?? 0)
+          setstrikersixes(d.sixes ?? 0)
+        }
+      })
+    firebaserealtimedb.ref(`${matchid}/${Key}/batsmen/${nonstriker}`)
+      .once('value')
+      .then(snap => {
+        const d = snap.val()
+        if (d) {
+          setnonstrikerruns(d.runs ?? 0)
+          setnonstrikerballs(d.balls ?? 0)
+          setnonstrikerfours(d.fours ?? 0)
+          setnonstrikersixes(d.sixes ?? 0)
+        }
+      })
+    firebaserealtimedb.ref(`${matchid}/${Key}/bowlers/${bowler}`)
+      .once('value')
+      .then(snap => {
+        const d = snap.val()
+        if (d) {
+          setbowlerruns(d.runs ?? 0)
+          setbowlerovers(d.overs ?? 0)
+          setbowlerwickets(d.wickets ?? 0)
+          setbowlermaiden(d.maidens ?? 0)
+          setbowerballs(d.balls ?? 0)
+        }
+      })
+    firebaserealtimedb.ref(`${matchid}/${Key}`)
+      .once('value')
+      .then(snap => {
+        const d = snap.val()
+        if (d) {
+          setteamruns(d.Totalteamruns ?? 0)
+          setteamwickets(d.Totalteamwickets ?? 0)
+          setTeamovers(d.Totalteamovers ?? 0)
+        }
+      })
+  },);
 
   function updatescore(val) {
+    const prevBowlerBalls = bowlerballs
+    const newBowlerBalls = prevBowlerBalls + 1
+
     if (val === 'W') {
       const oldbowwick = bowlerwickets
       const newbowlwick = oldbowwick + 1
@@ -119,14 +142,11 @@ export default function Scorecard() {
         .update(wicketUpdates)
         .catch(err => console.error(err))
       navigate('/NewBatsman', {
-        state: { hostteam, visitteam, overs: Teamovers, striker, nonstriker, bowler, tag, bowlerballs,teamruns }
+        state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns }
       })
-      return
     }
-    const prevBowlerBalls = bowlerballs
-    const newBowlerBalls = prevBowlerBalls + 1
-    if (val % 2 === 1) {
 
+    if (val % 2 === 1) {
       settag(prev => !prev)
     }
 
@@ -184,9 +204,14 @@ export default function Scorecard() {
       const prevteamovers = Teamovers;
       const newteamovers = prevteamovers + 1
       setTeamovers(newteamovers)
-      navigate('/newbowler', {
-        state: { hostteam, visitteam, overs, striker, nonstriker, bowler, tag,newteamovers ,teamruns}
-      })
+      if (val % 2 === 0)
+        navigate('/newbowler', {
+          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamovers, teamruns }
+        })
+      else
+        navigate('/newbowler', {
+          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag, newteamovers, teamruns }
+        })
     }
   }
 
@@ -206,6 +231,23 @@ export default function Scorecard() {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <h3 style={{ marginRight: '30px' }}>{hostteam}</h3>
           <h3>{teamruns}</h3><h2>-</h2><h3>{teamwickets}</h3><h2>(</h2><h3>{Teamovers}</h3><h1>.</h1><h3>{bowlerballs}</h3><h2>)</h2>
+          <h3 style={{ marginLeft: '150px' }}>{'Innings - '}{innings}</h3>
+
+          {innings === 1 && (
+            <h3 style={{ marginLeft: '100px' }}>CRR:&nbsp;
+              {(() => {
+                const ballsBowled = Teamovers * 6 + bowlerballs;
+                if (ballsBowled === 0) return '0.00';
+                const oversBowled = ballsBowled / 6;
+                return (teamruns / oversBowled).toFixed(2);
+              })()}
+            </h3>
+          )}
+          {innings === 2 && (
+            <h3 style={{ marginLeft: '100px' }}>
+              target {targetruns+1}
+            </h3>
+          )}
         </div>
 
       </div>
@@ -269,7 +311,7 @@ export default function Scorecard() {
         </table>
       </div>
       <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-      <h5>This Over</h5>
+        <h5>This Over</h5>
       </div>
       <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
         <input type="button" className="btn btn-primary me-2" value="0" onClick={() => updatescore(0)} />
@@ -285,7 +327,7 @@ export default function Scorecard() {
         <input type="button" className='btn btn-primary me-2' value="Byes" onClick={() => swapbatsman()} />
         <input type="button" className='btn btn-primary me-2' value="Leg Byes" onClick={() => swapbatsman()} />
 
-        
+
 
       </div>
     </div>

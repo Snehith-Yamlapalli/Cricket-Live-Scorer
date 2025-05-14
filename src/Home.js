@@ -1,69 +1,81 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import firebase from './firebase';
 
 export default function Home() {
+
+  const firebaserealtimedb = firebase.database()
   const navigate = useNavigate();
-
-  const [hostteam, sethostteam] = useState('');
-  const [overs, setovers] = useState('');
-  const [visitteam, setvisitteam] = useState('');
+  const [hostteam, setHostteam] = useState('');
+  const [visitteam, setVisitteam] = useState('');
+  const [overs, setOvers] = useState('');
   const [tossWinner, setTossWinner] = useState('');
+  const [tossLooser,setTossLooser] = useState('')
+  const [tossDecision, setTossDecision] = useState('');
+  const innings = 1;
+  const matchid = hostteam + 'vs' + visitteam
 
-  function Startmatch() {
-    if (!hostteam || !visitteam || !overs || !tossWinner) {
-      alert('Please fill all fields and select toss winner');
-      return;
-    }
-
+  function Startmatch() 
+  {
     const parsedOver = parseInt(overs, 10);
-    if (parsedOver > 10) {
-      alert('Number of overs must be less than 10');
+    if (parsedOver < 1 || parsedOver > 9) {
+      alert('Number of overs must be between 1 and 10');
       return;
     }
-
+    const updates = {
+      INFO: {
+        MatchBetween: `${hostteam} vs ${visitteam}`,
+        TossWinner: tossWinner,
+        TossLooser:tossLooser,
+        ChooseTo: tossDecision,   
+        NoOfOvers: parsedOver
+      }
+    };
+    firebaserealtimedb
+      .ref(matchid)
+      .update(updates)
+    if (!hostteam || !visitteam || !overs || !tossWinner || !tossDecision) {
+      alert('Please fill all fields and make your toss decision');
+      return;
+    }
+    
     navigate('/BBL', {
-      state: { hostteam, visitteam, overs: parsedOver, toss: tossWinner }
+      state: { innings, hostteam, visitteam, overs: parsedOver, tossWinner, choice: tossDecision }
     });
   }
 
   return (
     <div>
       <h1 id="head">Cric App</h1>
-      <div className='row justify-content-center'>
-        <div className='shadow-lg p-3 mb-5 bg-white rounded col-md-6'>
-          <h1>Teams</h1>
-          <input  type="text" placeholder='Host Team' className='form-control mb-2'  value={hostteam}  onChange={(e) => sethostteam(e.target.value)} />
-          <input  type="text" placeholder='Visiting Team' className='form-control mb-3'  value={visitteam}  onChange={(e) => setvisitteam(e.target.value)} />
+      <div className="row justify-content-center">
+        <div className="shadow-lg p-3 mb-5 bg-white rounded col-md-6">
+          <h2>Teams</h2>
+          <input type="text" placeholder="Host Team" className="form-control mb-2" value={hostteam} onChange={e => setHostteam(e.target.value)} />
+          <input type="text" placeholder="Visiting Team" className="form-control mb-3" value={visitteam} onChange={e => setVisitteam(e.target.value)} />
 
           <h2>Toss Winner</h2>
-          <div className="mb-3">
-            <div className="form-check">
-              <input type="radio" className="form-check-input" id="hostToss" name="toss" value={hostteam} checked={tossWinner === hostteam} onChange={(e) => setTossWinner(e.target.value)} disabled={!hostteam}/>
-              <label className="form-check-label" htmlFor="hostToss">
-                {hostteam || "Host Team"}
-              </label>
-            </div>
-            <div className="form-check">
-              <input type="radio" className="form-check-input" id="visitToss" name="toss" value={visitteam} checked={tossWinner === visitteam} onChange={(e) => setTossWinner(e.target.value)} disabled={!visitteam}/>
-              <label className="form-check-label" htmlFor="visitToss">
-                {visitteam || "Visiting Team"}
-              </label>
-            </div>
-          </div>
+          <div className="form-check"><input type="radio" className="form-check-input" id="host-toss" name="tossWinner" value={hostteam} checked={tossWinner === hostteam} onChange={e => { setTossWinner(e.target.value);setTossLooser(visitteam); setTossDecision(''); }} disabled={!hostteam} /><label className="form-check-label" htmlFor="host-toss">{hostteam || 'Host Team'}</label></div>
+          <div className="form-check"><input type="radio" className="form-check-input" id="visit-toss" name="tossWinner" value={visitteam} checked={tossWinner === visitteam} onChange={e => { setTossWinner(e.target.value);setTossLooser(hostteam); setTossDecision(''); }} disabled={!visitteam} /><label className="form-check-label" htmlFor="visit-toss">{visitteam || 'Visiting Team'}</label></div>
 
-          <h2>Overs</h2>
-          <div className="row justify-content-center">
-            <div className="col-md-2">
-              <input  type="number"  placeholder='10'  className='form-control'  value={overs}  onChange={(e) => setovers(e.target.value)}  min="1" max="9" step="1"/>
-            </div>
-          </div>
+          <h2 className="mt-3">Choose to</h2>
+          {tossWinner ? (
+            <>
+              <div className="form-check"><input type="radio" className="form-check-input" id="batting" name="tossDecision" value="Batting" checked={tossDecision === 'Batting'} onChange={e => setTossDecision(e.target.value)} /><label className="form-check-label" htmlFor="batting">Batting</label></div>
+              <div className="form-check"><input type="radio" className="form-check-input" id="bowling" name="tossDecision" value="Bowling" checked={tossDecision === 'Bowling'} onChange={e => setTossDecision(e.target.value)} /><label className="form-check-label" htmlFor="bowling">Bowling</label></div>
+            </>
+          ) : (
+            <p className="text-muted">Select toss winner first</p>
+          )}
 
-          <div className="mt-4">
-            <input  onClick={Startmatch}  type="button"  className='btn btn-primary btn-lg'  value='Start Match'  disabled={!hostteam || !visitteam || !overs || !tossWinner}/>
-          </div>
+          <h2 className="mt-3">Overs</h2>
+          <input type="number" placeholder="1–10" className="form-control col-md-2" value={overs} onChange={e => setOvers(e.target.value)} min="1" max="10" />
+
+          <button className="btn btn-primary btn-lg mt-4" onClick={Startmatch} disabled={!hostteam || !visitteam || !overs || !tossWinner || !tossDecision}>
+            Start Match
+          </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

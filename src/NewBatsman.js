@@ -1,34 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function NewBatsman() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hostteam, visitteam, overs, striker, nonstriker, bowler, tag ,bowlerballs,teamruns} = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns } = location.state || {};
   const [newstriker, setnewstriker] = useState()
   const [newnonstriker, setnewnonstriker] = useState()
   const newBowlerBalls = bowlerballs + 1
   const newteamruns = teamruns
+  
+  useEffect(() => {
+        if(innings===1)
+          {
+            alert(`in displaying curr batsman ${innings} && ${hostteam} && ${visitteam} && ${overs} && ${striker} && ${nonstriker} && ${bowler} && ${tag} && ${bowlerballs} && ${teamruns}`)       
+          }},);
+  
   function Startmatch() 
   {
-    const bb = bowlerballs
-    const nbb = bb + 1
-    if (tag) {
-      if (!newstriker?.trim()) {
+    if (tag) 
+      {
+      const stcandidate = newstriker?.trim();
+      if (!newstriker?.trim()) 
+      {
         alert('Please enter the new striker name');
         return;
       }
       navigate('/scorecard', {
-        state: { hostteam, visitteam, overs, striker: newstriker.trim(), nonstriker, bowler ,tag:tag ,bowlerballs:newBowlerBalls,teamruns:newteamruns}
+        state: { innings, hostteam, visitteam, overs, striker: stcandidate, nonstriker, bowler, tag: tag, bowlerballs: newBowlerBalls, teamruns: newteamruns }
       });
     }
     else {
+      const nstcandidate = newnonstriker?.trim();
       if (!newnonstriker?.trim()) {
         alert('Please enter the new non-striker name');
         return;
       }
       navigate('/scorecard', {
-        state: { hostteam, visitteam, overs, striker, nonstriker: newnonstriker.trim(), bowler ,tag:tag,bowlerballs:newBowlerBalls,teamruns}
+        state: { innings, hostteam, visitteam, overs, striker, nonstriker: nstcandidate, bowler, tag: tag, bowlerballs: newBowlerBalls, teamruns }
       });
     }
   }

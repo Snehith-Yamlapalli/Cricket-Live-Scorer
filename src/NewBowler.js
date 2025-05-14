@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function NewBowler() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
+    const { innings,hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
     const [bowler, setnewbowler] = useState('');
     useEffect(() => {
         if (newteamovers === overs) 
-        {alert('innnigs over')
-            const targetruns = teamruns
-            navigate('/Target', {
-                state: { hostteam, visitteam, overs, striker, nonstriker, bowler, tag, targetruns }
+        {
+            const newinnings = 2
+            alert('innnigs over')
+            const newteamruns = teamruns
+            navigate('/BBL', {
+                state: { innings:newinnings,hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
             })
         }
-    }, []);
+    }, );
 
     function Startmatch() {
         if (!bowler.trim()) {
@@ -22,7 +24,7 @@ export default function NewBowler() {
             return;
         }
         navigate('/scorecard', {
-            state: { hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag }
+            state: { innings,hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag }
         });
     }
     return (

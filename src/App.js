@@ -6,7 +6,8 @@ import BBL from './BBL';
 import Scorecard from './Scorecard';
 import NewBatsman from './NewBatsman';
 import NewBowler from './NewBowler';
-import Target from './Target';
+import Over from './Over';
+
 function App() {
 
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/scorecard" element={<Scorecard />} />
         <Route path="/NewBowler" element={<NewBowler />} />
         <Route path="/NewBatsman" element={<NewBatsman />} />
-        <Route path="/Target" element={<Target />} />
+        <Route path="/Over" element={<Over />} />
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
     </Router>
