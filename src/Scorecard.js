@@ -272,7 +272,7 @@ export default function Scorecard() {
           </thead>
           <tbody>
             <tr>
-              <td style={{ backgroundColor: tag ? '#d4edda' : 'transparent', color: tag ? 'red' : 'inherit', fontWeight: 'bold' }}>
+              <td style={{ backgroundColor: tag ? 'chartreuse' : 'transparent', fontWeight: 'bold' }}>
                 {striker}
               </td>
               <td>{strikerruns}</td>
@@ -282,7 +282,7 @@ export default function Scorecard() {
               <td>{strikerballs ? ((strikerruns / strikerballs) * 100).toFixed(2) : '0.00'}</td>
             </tr>
             <tr>
-              <td style={{ backgroundColor: !tag ? '#d4edda' : 'transparent', color: !tag ? 'red' : 'inherit', fontWeight: !tag ? 'bold' : '' }}>
+              <td style={{ backgroundColor: !tag ? 'chartreuse' : 'transparent', fontWeight: 'bold' }}>
                 {nonstriker}</td>
               <td>{nonstrikerruns}</td>
               <td>{nonstrikerballs}</td>
