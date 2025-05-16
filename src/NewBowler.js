@@ -18,7 +18,7 @@ export default function NewBowler() {
         }else if(newteamovers === overs && innings===2)
         {
             alert('Match over!!')
-            navigate('/Over')
+            navigate('/Over',{state:{hostteam,visitteam}})
         }
     },);
 

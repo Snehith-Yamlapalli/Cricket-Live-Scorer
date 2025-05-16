@@ -43,13 +43,13 @@ export default function Over() {
 
   return (
     <div id='teams' className='row justify-content-center '>
-      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(182, 172, 171)', marginTop: '120px',height:'200px' }}>
+      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(182, 172, 171)', marginTop: '120px',height:'250px' }}>
         <div className="text-center mt-5">
-          <h1>{hostteam}vs{visitteam}</h1>
-          <h1>{result}</h1>
-        </div>
-          <input type="button" className="btn btn-primary" value="Scorecard" onClick={()=>scores()}/>
-      </div>
+          <h2>{hostteam}{'   '}vs{'   '}{visitteam}</h2>
+          <h2>{result}</h2>
+         <input type="button" className="btn btn-primary" value="Scorecard" onClick={()=>scores()}/>
+    </div>
+    </div>
     </div>
 
   );
