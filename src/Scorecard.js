@@ -4,6 +4,8 @@ import firebase from './firebase';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
+
+
 export default function Scorecard() {
   const navigate = useNavigate();
   const firebaserealtimedb = firebase.database()
@@ -57,9 +59,8 @@ export default function Scorecard() {
   function swapbatsman() {
     settag(prev => !prev)
   }
+  useEffect(() => {
 
-  useEffect(() => 
-  {
     firebaserealtimedb
       .ref(`${matchid}/${'Innings1'}/Totalteamruns`)
       .once('value')
@@ -68,24 +69,12 @@ export default function Scorecard() {
         settargetruns(runs)
       })
       .catch(err => console.error(err))
-    if (innings === 2 && teamruns >= (targetruns + 1)) {
-      const winner = visitteam
-      alert('Match over!')
-      navigate('/Over', {
-        state: { winner }
-      })
-    }
-    if (innings === 2 && Teamovers === overs && teamruns < (targetruns + 1)) {
-      const winner = hostteam
-      alert('Match over!')
-      navigate('/Over', {
-        state: { winner }
-      })
-    }
-  },);
 
-
-  useEffect(() => {
+    if (innings === 2 && teamruns > targetruns + 1) {
+      const newteamruns = teamruns + 1
+      setteamruns(newteamruns)
+      navigate('/Over', {state: {hostteam,visitteam}});
+    }
     firebaserealtimedb.ref(`${matchid}/${Key}/batsmen/${striker}`)
       .once('value')
       .then(snap => {
@@ -282,8 +271,7 @@ export default function Scorecard() {
       .catch(err => console.error(err))
 
 
-    if (selected.includes('W') && newBowlerBalls !== 6) 
-    {
+    if (selected.includes('W') && newBowlerBalls !== 6) {
       const extraString = selected.join('');               // e.g. "Wd" or "NoBallByes"
       const entry = `${runs}${extraString}`;         // e.g. "4Wd" or "1NoBallByes"
       const newOver = [...thisover, entry];            // append to the over array
@@ -324,7 +312,7 @@ export default function Scorecard() {
         .catch(err => console.error(err))
 
       const prevteamovers = Teamovers;
-      const newteamovers = prevteamovers+1
+      const newteamovers = prevteamovers + 1
       if (val % 2 === 0)
         navigate('/NBB', {
           state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamovers, teamruns, bowlerovers }
@@ -340,134 +328,134 @@ export default function Scorecard() {
 
   return (
     <div className="container-fluid py-3">
-    <div className='row justify-content-center'>
-      <div id='teams1' className='row justify-content-center '>
-        <div className='col-md-2' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <h1>{hostteam}</h1>
-          <h3><span>Vs</span></h3>
-          <h1>{visitteam}</h1>
-        </div>
-      </div>
-
-      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(182, 172, 171)', marginTop: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '30px' }}>{innings === 1 ? hostteam : visitteam}</h3>
-          <h3>{teamruns}</h3><h2>-</h2><h3>{teamwickets}</h3><h2>(</h2><h3>{Teamovers}</h3><h1>.</h1><h3>{bowlerballs}</h3><h2>)</h2>
-          <h3 style={{ marginLeft: '130px' }}>{'Innings '}{innings}</h3>
-
-          {innings === 1 && (
-            <h3 style={{ marginLeft: '60px' }}>CRR:&nbsp;
-              {(() => {
-                const ballsBowled = Teamovers * 6 + bowlerballs;
-                if (ballsBowled === 0) return '0.00';
-                const oversBowled = ballsBowled / 6;
-                return (teamruns / oversBowled).toFixed(2);
-              })()}
-            </h3>
-          )}
-          {innings === 2 && (
-            <h3 style={{ marginLeft: '60px' }}>
-              target {targetruns + 1}
-            </h3>
-          )}
-          <h3 style={{ marginLeft: '30px' }}>Total Over:{overs}</h3>
-        </div>
-
-      </div>
-
-      <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Batsman</th>
-              <th>R</th>
-              <th>B</th>
-              <th>4s</th>
-              <th>6s</th>
-              <th>SR</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ backgroundColor: tag ? 'chartreuse' : 'transparent', fontWeight: 'bold' }}>
-                {striker}
-              </td>
-              <td>{strikerruns}</td>
-              <td>{strikerballs}</td>
-              <td>{strikerfours}</td>
-              <td>{strikersixes}</td>
-              <td>{strikerballs ? ((strikerruns / strikerballs) * 100).toFixed(2) : '0.00'}</td>
-            </tr>
-            <tr>
-              <td style={{ backgroundColor: !tag ? 'chartreuse' : 'transparent', fontWeight: 'bold' }}>
-                {nonstriker}</td>
-              <td>{nonstrikerruns}</td>
-              <td>{nonstrikerballs}</td>
-              <td>{nonstrikerfours}</td>
-              <td>{nonstrikersixes}</td>
-              <td>{nonstrikerballs ? ((nonstrikerruns / nonstrikerballs) * 100).toFixed(2) : '0.00'}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Bowler</th>
-              <th>O</th>
-              <th>M</th>
-              <th>R</th>
-              <th>W</th>
-              <th>E</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{bowler}</td>
-              <td>{bowlerovers}{'.'}{bowlerballs}</td>
-              <td>{bowlermaiden}</td>
-              <td>{bowlerruns}</td>
-              <td>{bowlerwickets}</td>
-              <td>{(bowlerballs || bowlerovers) > 0 ? (bowlerruns / (bowlerovers + bowlerballs / 6)).toFixed(2) : '0.00'}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'chartreuse' }}>
-        <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'chartreuse' }}>
-          <h5 style={{ marginRight: '10px' }}>This Over:</h5>
-          <div style={{ display: 'flex', gap: '10px', fontSize: '20px' }}>
-            {thisover.map((b, idx) => (
-              <span key={idx} className="badge bg-success">{b}</span>
-            ))}
+      <div className='row justify-content-center'>
+        <div id='teams1' className='row justify-content-center '>
+          <div className='col-md-2' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h1>{hostteam}</h1>
+            <h3><span>Vs</span></h3>
+            <h1>{visitteam}</h1>
           </div>
         </div>
 
+        <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(182, 172, 171)', marginTop: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <h3 style={{ marginRight: '30px' }}>{innings === 1 ? hostteam : visitteam}</h3>
+            <h3>{teamruns}</h3><h2>-</h2><h3>{teamwickets}</h3><h2>(</h2><h3>{Teamovers}</h3><h1>.</h1><h3>{bowlerballs}</h3><h2>)</h2>
+            <h3 style={{ marginLeft: '130px' }}>{'Innings '}{innings}</h3>
+
+            {innings === 1 && (
+              <h3 style={{ marginLeft: '60px' }}>CRR:&nbsp;
+                {(() => {
+                  const ballsBowled = Teamovers * 6 + bowlerballs;
+                  if (ballsBowled === 0) return '0.00';
+                  const oversBowled = ballsBowled / 6;
+                  return (teamruns / oversBowled).toFixed(2);
+                })()}
+              </h3>
+            )}
+            {innings === 2 && (
+              <h3 style={{ marginLeft: '60px' }}>
+                target {targetruns + 1}
+              </h3>
+            )}
+            <h3 style={{ marginLeft: '30px' }}>Total Over:{overs}</h3>
+          </div>
+
+        </div>
+
+        <div className='shadow-lg p-3 mb-3 bg-white rounded col-md-7'>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Batsman</th>
+                <th>R</th>
+                <th>B</th>
+                <th>4s</th>
+                <th>6s</th>
+                <th>SR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ backgroundColor: tag ? 'chartreuse' : 'transparent', fontWeight: 'bold' }}>
+                  {striker}
+                </td>
+                <td>{strikerruns}</td>
+                <td>{strikerballs}</td>
+                <td>{strikerfours}</td>
+                <td>{strikersixes}</td>
+                <td>{strikerballs ? ((strikerruns / strikerballs) * 100).toFixed(2) : '0.00'}</td>
+              </tr>
+              <tr>
+                <td style={{ backgroundColor: !tag ? 'chartreuse' : 'transparent', fontWeight: 'bold' }}>
+                  {nonstriker}</td>
+                <td>{nonstrikerruns}</td>
+                <td>{nonstrikerballs}</td>
+                <td>{nonstrikerfours}</td>
+                <td>{nonstrikersixes}</td>
+                <td>{nonstrikerballs ? ((nonstrikerruns / nonstrikerballs) * 100).toFixed(2) : '0.00'}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Bowler</th>
+                <th>O</th>
+                <th>M</th>
+                <th>R</th>
+                <th>W</th>
+                <th>E</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{bowler}</td>
+                <td>{bowlerovers}{'.'}{bowlerballs}</td>
+                <td>{bowlermaiden}</td>
+                <td>{bowlerruns}</td>
+                <td>{bowlerwickets}</td>
+                <td>{(bowlerballs || bowlerovers) > 0 ? (bowlerruns / (bowlerovers + bowlerballs / 6)).toFixed(2) : '0.00'}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'chartreuse' }}>
+          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'chartreuse' }}>
+            <h5 style={{ marginRight: '10px' }}>This Over:</h5>
+            <div style={{ display: 'flex', gap: '10px', fontSize: '20px' }}>
+              {thisover.map((b, idx) => (
+                <span key={idx} className="badge bg-success">{b}</span>
+              ))}
+            </div>
+          </div>
+
+        </div>
+        <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(182, 172, 171)' }}>
+          <Stack direction="row" spacing={4}>
+            {OPTIONS.map(opt => (
+              <FormControlLabel
+                key={opt.key}
+                control={
+                  <Checkbox
+                    checked={selected.includes(opt.key)}
+                    onChange={() => updateextraruns(opt.key)}
+                  />
+                }
+                label={opt.label}
+              />
+            ))}
+          </Stack> <br />
+          <input type="button" className="btn btn-primary me-2" value="0" onClick={() => updatescore(0)} />
+          <input type="button" className="btn btn-primary me-2" value="1" onClick={() => updatescore(1)} />
+          <input type="button" className="btn btn-primary me-2" value="2" onClick={() => updatescore(2)} />
+          <input type="button" className="btn btn-primary me-2" value="3" onClick={() => updatescore(3)} />
+          <input type="button" className="btn btn-primary me-2" value="4" onClick={() => updatescore(4)} />
+          <input type="button" className="btn btn-primary me-2" value="6" onClick={() => updatescore(6)} />
+          <input type="button" className='btn btn-primary me-2' value="SwapBatsman" onClick={() => swapbatsman()} />
+        </div>
       </div>
-      <div className='shadow-lg p-3 mb-3 rounded col-md-7' style={{ backgroundColor: 'rgb(182, 172, 171)' }}>
-        <Stack direction="row" spacing={4}>
-          {OPTIONS.map(opt => (
-            <FormControlLabel
-              key={opt.key}
-              control={
-                <Checkbox
-                  checked={selected.includes(opt.key)}
-                  onChange={() => updateextraruns(opt.key)}
-                />
-              }
-              label={opt.label}
-            />
-          ))}
-        </Stack> <br />
-        <input type="button" className="btn btn-primary me-2" value="0" onClick={() => updatescore(0)} />
-        <input type="button" className="btn btn-primary me-2" value="1" onClick={() => updatescore(1)} />
-        <input type="button" className="btn btn-primary me-2" value="2" onClick={() => updatescore(2)} />
-        <input type="button" className="btn btn-primary me-2" value="3" onClick={() => updatescore(3)} />
-        <input type="button" className="btn btn-primary me-2" value="4" onClick={() => updatescore(4)} />
-        <input type="button" className="btn btn-primary me-2" value="6" onClick={() => updatescore(6)} />
-        <input type="button" className='btn btn-primary me-2' value="SwapBatsman" onClick={() => swapbatsman()} />
-      </div>
-    </div>
     </div>
   );
 }

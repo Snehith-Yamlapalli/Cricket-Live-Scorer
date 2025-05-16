@@ -7,13 +7,18 @@ export default function NewBowler() {
     const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
     const [bowler, setnewbowler] = useState('');
     useEffect(() => {
-        if (newteamovers === overs) {
+
+        if (newteamovers === overs && innings===1) {
             const newinnings = 2
             alert('innnigs over')
             const newteamruns = teamruns
             navigate('/BBL', {
                 state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
             })
+        }else if(newteamovers === overs && innings===2)
+        {
+            alert('Match over!!')
+            navigate('/Over')
         }
     },);
 
