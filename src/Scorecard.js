@@ -282,7 +282,6 @@ export default function Scorecard() {
 
 
     if (selected.includes('W') && newBowlerBalls !== 6) {
-      alert('WWE')
       navigate('/NewBatsman', {
         state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns, thisover, selected, runs }
       })
