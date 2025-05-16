@@ -58,7 +58,8 @@ export default function Scorecard() {
     settag(prev => !prev)
   }
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     firebaserealtimedb
       .ref(`${matchid}/${'Innings1'}/Totalteamruns`)
       .once('value')
@@ -67,7 +68,6 @@ export default function Scorecard() {
         settargetruns(runs)
       })
       .catch(err => console.error(err))
-
     if (innings === 2 && teamruns >= (targetruns + 1)) {
       const winner = visitteam
       alert('Match over!')
@@ -171,7 +171,7 @@ export default function Scorecard() {
         [`${Key}/Totalteamruns`]: teamruns + (val !== 'W' ? val : 0),
         [`${Key}/Totalteamwickets`]: teamwickets + (val === 'W' ? 1 : 0),
         [`${Key}/Totalteamovers`]: Teamovers + (newBowlerBalls === 6 ? 1 : 0),
-        [`${Key}/Over/${Teamovers}`]:selected,
+        [`${Key}/Over/${bowler}/${bowlerovers}`]: updatedOver,
         [`${Key}/batsmen/${striker}`]: {
           runs: strikerruns + (tag ? (val !== 'W' ? val : 0) : 0),
           balls: strikerballs + (tag ? 1 : 0),
@@ -250,12 +250,12 @@ export default function Scorecard() {
 
     // cpnting runs
     if (selected.includes('LB') || selected.includes('NB') || selected.includes('W')) runcount = true
-
+    sethisover(prev => [...prev, `${runs}${[...selected].join('')}`]);
     const updates = {
       [`${Key}/Totalteamruns`]: teamruns + val,
       [`${Key}/Totalteamwickets`]: teamwickets + (selected.includes('W') ? 1 : 0),
       [`${Key}/Totalteamovers`]: Teamovers + (newBowlerBalls === 6 ? 1 : 0),
-      [`${Key}/Over/${Teamovers}`]:selected,
+      [`${Key}/Over/${bowler}/${bowlerovers}`]: selected,
       [`${Key}/batsmen/${striker}`]: {
         runs: strikerruns + ((tag && runcount) ? runs : 0),
         balls: strikerballs + ((tag && (ballcount || selected.includes('NB'))) ? 1 : 0),
@@ -280,11 +280,21 @@ export default function Scorecard() {
       .ref(matchid)
       .update(updates)
       .catch(err => console.error(err))
-    sethisover(prev => [...prev, `${runs}${[...selected].join('')}`]);
 
 
-    if (selected.includes('W') && newBowlerBalls !== 6) {
-      alert('WWE')
+    if (selected.includes('W') && newBowlerBalls !== 6) 
+    {
+      const extraString = selected.join('');               // e.g. "Wd" or "NoBallByes"
+      const entry = `${runs}${extraString}`;         // e.g. "4Wd" or "1NoBallByes"
+      const newOver = [...thisover, entry];            // append to the over array
+      sethisover(newOver);
+      const updates =
+        { [`${Key}/Over/${bowler}/${bowlerovers}`]: newOver }
+
+      firebaserealtimedb
+        .ref(matchid)
+        .update(updates)
+        .catch(err => console.error(err))
       navigate('/NewBatsman', {
         state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns, thisover, selected, runs }
       })
@@ -300,17 +310,28 @@ export default function Scorecard() {
         navigate('/newbowler', {
           state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag, newteamovers, teamruns }
         })
-    } else if (selected.includes('W') && newBowlerBalls === 6) 
-      {
-        const prevteamovers = Teamovers;
-      const newteamovers = prevteamovers
+    } else if (selected.includes('W') && newBowlerBalls === 6) {
+      const extraString = selected.join('');               // e.g. "Wd" or "NoBallByes"
+      const entry = `${runs}${extraString}`;         // e.g. "4Wd" or "1NoBallByes"
+      const newOver = [...thisover, entry];            // append to the over array
+      sethisover(newOver);
+      const updates =
+        { [`${Key}/Over/${bowler}/${bowlerovers}`]: newOver }
+
+      firebaserealtimedb
+        .ref(matchid)
+        .update(updates)
+        .catch(err => console.error(err))
+
+      const prevteamovers = Teamovers;
+      const newteamovers = prevteamovers+1
       if (val % 2 === 0)
         navigate('/NBB', {
-          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamovers, teamruns }
+          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamovers, teamruns, bowlerovers }
         })
       else
         navigate('/NBB', {
-          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag, newteamovers, teamruns }
+          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag, newteamovers, teamruns, bowlerovers }
         })
     }
     setSelected([])
@@ -318,6 +339,7 @@ export default function Scorecard() {
 
 
   return (
+    <div className="container-fluid py-3">
     <div className='row justify-content-center'>
       <div id='teams1' className='row justify-content-center '>
         <div className='col-md-2' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -445,6 +467,7 @@ export default function Scorecard() {
         <input type="button" className="btn btn-primary me-2" value="6" onClick={() => updatescore(6)} />
         <input type="button" className='btn btn-primary me-2' value="SwapBatsman" onClick={() => swapbatsman()} />
       </div>
+    </div>
     </div>
   );
 }

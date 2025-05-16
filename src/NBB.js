@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function NBB() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, bowlerballs, teamruns} = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns} = location.state || {};
   const [newstriker, setnewstriker] = useState()
   const [newnonstriker, setnewnonstriker] = useState()
   const [bowler, setnewbowler] = useState('');
   const newBowlerBalls = 0
   const newteamruns = teamruns
+
+   useEffect(() => {
+          if (newteamovers === overs) {
+              const newinnings = 2
+              alert('innnigs over')
+              const newteamruns = teamruns
+              navigate('/BBL', {
+                  state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
+              })
+          }
+      },);
 
   function Startmatch() {
     if (tag) 

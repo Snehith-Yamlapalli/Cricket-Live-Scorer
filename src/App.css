@@ -69,3 +69,42 @@ input{
   padding: 0;
   cursor: 'pointer'
 }
+.live-viewer {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.match-header {
+  background: #2c3e50;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.innings-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.score-box {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.score-box .runs {
+  color: #e74c3c;
+}
+
+.player {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}

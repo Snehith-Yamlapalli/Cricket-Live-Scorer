@@ -15,7 +15,16 @@ export default function LiveScore() {
 
   if (!matchData) return <div>Loading live score for {matchId}…</div>;
 
-  const { INFO = {}, Innings1 = {}, Innings2 = null, Over = {} } = matchData;
+  const {
+  INFO     = {},
+  Innings1 = {},
+  Innings2 = null
+} = matchData;
+
+// grab only the Over node from each innings
+const Over1 = Innings1.Over || {};
+const Over2 = (Innings2 && Innings2.Over) || {};
+
 
   return (
     <div className="container my-4">
@@ -85,27 +94,29 @@ export default function LiveScore() {
           ))}
         </tbody>
       </table>
-      <h4>Over-by-Over Breakdown</h4>
-      <table className="table table-bordered table-sm">
-        <thead>
-          <tr>
-            <th>Over</th>
-            <th>Balls</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(Over).map(([overNum, balls]) => (
-            <tr key={overNum}>
-              <td>{Number(overNum) + 1}</td>
-              <td>
-                {balls.map((b, i) => (
-                  <span key={i} style={{ marginRight: '6px' }}>{b}</span>
+      {Object.keys(Over1).length === 0 ? (
+        <p>No overs bowled yet in Innings 1.</p>
+      ) : (
+        Object.entries(Over1).map(([bowlerName, oversObj]) => (
+          <div key={`i1-${bowlerName}`} className="mb-4">
+            <h5>Bowler: {bowlerName}</h5>
+            <table className="table table-bordered table-sm">
+              <thead>
+                <tr><th>Over #</th><th>Balls</th></tr>
+              </thead>
+              <tbody>
+                {Object.entries(oversObj).map(([idx, balls]) => (
+                  <tr key={`i1-${bowlerName}-${idx}`}>
+                    <td>{Number(idx) + 1}</td>
+                    <td>{balls.join(' ')}</td>
+                  </tr>
                 ))}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </tbody>
+            </table>
+          </div>
+        ))
+      )}
+
 
       {Innings2 && (
         <>
@@ -172,6 +183,28 @@ export default function LiveScore() {
             </tbody>
           </table>
         </>
+      )}
+      {Object.keys(Over2).length === 0 ? (
+        <p>No overs bowled yet in Innings 1.</p>
+      ) : (
+        Object.entries(Over2).map(([bowlerName, oversObj]) => (
+          <div key={`i1-${bowlerName}`} className="mb-4">
+            <h5>Bowler: {bowlerName}</h5>
+            <table className="table table-bordered table-sm">
+              <thead>
+                <tr><th>Over #</th><th>Balls</th></tr>
+              </thead>
+              <tbody>
+                {Object.entries(oversObj).map(([idx, balls]) => (
+                  <tr key={`i1-${bowlerName}-${idx}`}>
+                    <td>{Number(idx) + 1}</td>
+                    <td>{balls.join(' ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))
       )}
     </div>
   );
