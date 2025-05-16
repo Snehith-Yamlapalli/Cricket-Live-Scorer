@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams }        from 'react-router-dom';
-import firebase              from './firebase';
+import { useParams } from 'react-router-dom';
+import firebase from './firebase';
 
 export default function LiveScore() {
   const { matchId } = useParams();
@@ -15,7 +15,7 @@ export default function LiveScore() {
 
   if (!matchData) return <div>Loading live score for {matchId}…</div>;
 
-  const { INFO = {}, Innings1 = {}, Innings2 = null } = matchData;
+  const { INFO = {}, Innings1 = {}, Innings2 = null, Over = {} } = matchData;
 
   return (
     <div className="container my-4">
@@ -81,6 +81,27 @@ export default function LiveScore() {
               <td>{s.runs}</td>
               <td>{s.wickets}</td>
               <td>{s.maidens}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h4>Over-by-Over Breakdown</h4>
+      <table className="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th>Over</th>
+            <th>Balls</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(Over).map(([overNum, balls]) => (
+            <tr key={overNum}>
+              <td>{Number(overNum) + 1}</td>
+              <td>
+                {balls.map((b, i) => (
+                  <span key={i} style={{ marginRight: '6px' }}>{b}</span>
+                ))}
+              </td>
             </tr>
           ))}
         </tbody>

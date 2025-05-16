@@ -171,6 +171,7 @@ export default function Scorecard() {
         [`${Key}/Totalteamruns`]: teamruns + (val !== 'W' ? val : 0),
         [`${Key}/Totalteamwickets`]: teamwickets + (val === 'W' ? 1 : 0),
         [`${Key}/Totalteamovers`]: Teamovers + (newBowlerBalls === 6 ? 1 : 0),
+        [`${Key}/Over/${Teamovers}`]:selected,
         [`${Key}/batsmen/${striker}`]: {
           runs: strikerruns + (tag ? (val !== 'W' ? val : 0) : 0),
           balls: strikerballs + (tag ? 1 : 0),
@@ -254,6 +255,7 @@ export default function Scorecard() {
       [`${Key}/Totalteamruns`]: teamruns + val,
       [`${Key}/Totalteamwickets`]: teamwickets + (selected.includes('W') ? 1 : 0),
       [`${Key}/Totalteamovers`]: Teamovers + (newBowlerBalls === 6 ? 1 : 0),
+      [`${Key}/Over/${Teamovers}`]:selected,
       [`${Key}/batsmen/${striker}`]: {
         runs: strikerruns + ((tag && runcount) ? runs : 0),
         balls: strikerballs + ((tag && (ballcount || selected.includes('NB'))) ? 1 : 0),
@@ -282,6 +284,7 @@ export default function Scorecard() {
 
 
     if (selected.includes('W') && newBowlerBalls !== 6) {
+      alert('WWE')
       navigate('/NewBatsman', {
         state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns, thisover, selected, runs }
       })
