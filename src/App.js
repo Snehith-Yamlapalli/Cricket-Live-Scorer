@@ -7,7 +7,7 @@ import Scorecard from './Scorecard';
 import NewBatsman from './NewBatsman';
 import NewBowler from './NewBowler';
 import Over from './Over';
-
+import NBB from './NBB';
 function App() {
 
   return (
@@ -20,6 +20,7 @@ function App() {
         <Route path="/NewBowler" element={<NewBowler />} />
         <Route path="/NewBatsman" element={<NewBatsman />} />
         <Route path="/Over" element={<Over />} />
+        <Route path="/NBB" element={<NBB />} />
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
     </Router>

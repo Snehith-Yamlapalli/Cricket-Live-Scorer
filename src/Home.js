@@ -14,24 +14,31 @@ export default function Home() {
   const [tossLooser,setTossLooser] = useState('')
   const [tossDecision, setTossDecision] = useState('');
   const innings = 1;
-  const matchid = hostteam + 'vs' + visitteam
 
   function Startmatch() 
   {
     const parsedOver = parseInt(overs, 10);
-    if (parsedOver < 1 || parsedOver > 9) {
+    if (parsedOver < 1 || parsedOver > 10) {
       alert('Number of overs must be between 1 and 10');
       return;
     }
+    const firstBattingTeam  = tossDecision === 'Batting'
+    ? tossWinner
+    : (tossWinner === hostteam ? visitteam : hostteam);
+
+    const secondBattingTeam = firstBattingTeam === hostteam
+    ? visitteam
+    : hostteam;
     const updates = {
       INFO: {
-        MatchBetween: `${hostteam} vs ${visitteam}`,
+        MatchBetween: `${firstBattingTeam} vs ${secondBattingTeam}`,
         TossWinner: tossWinner,
         TossLooser:tossLooser,
         ChooseTo: tossDecision,   
         NoOfOvers: parsedOver
       }
     };
+    const matchid = firstBattingTeam + 'vs' + secondBattingTeam
     firebaserealtimedb
       .ref(matchid)
       .update(updates)
@@ -41,13 +48,7 @@ export default function Home() {
       return;
     }
 
-    const firstBattingTeam  = tossDecision === 'Batting'
-    ? tossWinner
-    : (tossWinner === hostteam ? visitteam : hostteam);
-
-  const secondBattingTeam = firstBattingTeam === hostteam
-    ? visitteam
-    : hostteam;
+    
     
     navigate('/BBL', {
       state: { innings, hostteam:  firstBattingTeam, visitteam: secondBattingTeam, overs: parsedOver }
