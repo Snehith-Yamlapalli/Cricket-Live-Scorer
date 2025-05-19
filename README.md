@@ -12,7 +12,7 @@ Runs the app in the development mode.\
 Open (https://cricket-live-scorer.vercel.app/) to view it in your browser.
 
 To Check the Live Scoring of the match 
-Open http://localhost:3000/livescore/FIRSTBATTINGTEAMNAMEvsSECONDBATTINGTEAMNAME
+Open https://cricket-live-scorer.vercel.app/livescore/FIRSTBATTINGTEAMNAMEvsSECONDBATTINGTEAMNAME    ( Edit the team names)
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
