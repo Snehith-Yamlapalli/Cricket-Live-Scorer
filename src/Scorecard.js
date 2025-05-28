@@ -258,7 +258,7 @@ export default function Scorecard() {
         sixes: nonstrikersixes + ((!tag && runcount) && val === 6 ? 1 : 0)
       },
       [`${Key}/bowlers/${bowler}`]: {
-        runs: bowlerruns + ((ballcount === false || selected.includes('W')|| selected.includes('Wd')) ? runs : 0),
+        runs: bowlerruns + ((ballcount === false || selected.includes('W')) ? val : 0),
         overs: bowlerovers + (newBowlerBalls === 6 ? 1 : 0),
         balls: (newBowlerBalls >= 6 ? 0 : newBowlerBalls),
         wickets: bowlerwickets + (selected.includes('W') ? 1 : 0),
