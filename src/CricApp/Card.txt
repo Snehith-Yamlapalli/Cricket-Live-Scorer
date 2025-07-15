@@ -1,0 +1,28 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+export default function Card({ item }) {
+
+  function display()
+  {
+    alert('clicked')
+  }
+  if (!item) return null;
+  const match = item.matches?.[0];
+  const venue = match?.venueInfo;
+
+  return (
+    <div className="card mb-4 ms-4 mt-2 shadow-lg" style={{ width: '250px' }}>
+      <div className="card-body">
+        <h5 className="card-title">{item.seriesName}</h5>
+        <h6 className="card-subtitle mb-2 text-body-secondary">
+          {match?.matchDesc || 'N/A'}
+        </h6>
+        <p className="card-text">
+          {match?.status || 'No status available'}
+          <br />
+          Venue: {venue?.ground || 'Unknown venue'}
+        </p>
+      </div>
+    </div>
+  );
+}

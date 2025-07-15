@@ -1,0 +1,309 @@
+react refresh:37 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+International.js:58 {
+  "typeMatches": [{
+    "matchType": "International",
+    "seriesMatches": [{
+      "seriesAdWrapper": {
+        "seriesId": 8786,
+        "seriesName": "India tour of England, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 105772,
+            "seriesId": 8786,
+            "seriesName": "India tour of England, 2025",
+            "matchDesc": "3rd Test",
+            "matchFormat": "TEST",
+            "startDate": "1752141600000",
+            "endDate": "1752512400000",
+            "state": "Preview",
+            "status": "Match starts at Jul 10, 10:00 GMT",
+            "team1": {
+              "teamId": 9,
+              "teamName": "England",
+              "teamSName": "ENG",
+              "imageId": 172123
+            },
+            "team2": {
+              "teamId": 2,
+              "teamName": "India",
+              "teamSName": "IND",
+              "imageId": 719031
+            },
+            "venueInfo": {
+              "id": 19,
+              "ground": "Lord\u0027s",
+              "city": "London",
+              "timezone": "+01:00",
+              "latitude": "51.529488",
+              "longitude": "-0.172926"
+            },
+            "seriesStartDt": "1750291200000",
+            "seriesEndDt": "1754352000000",
+            "isTimeAnnounced": true,
+            "stateTitle": "Preview"
+          }
+        }]
+      }
+    }, {
+      "seriesAdWrapper": {
+        "seriesId": 9809,
+        "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 118619,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "1st T20I",
+            "matchFormat": "T20",
+            "startDate": "1752154200000",
+            "endDate": "1752166800000",
+            "state": "Preview",
+            "status": "Match starts at Jul 10, 13:30 GMT",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 254,
+              "ground": "Pallekele International Cricket Stadium",
+              "city": "Pallekele",
+              "timezone": "+05:30",
+              "latitude": "7.280691",
+              "longitude": "80.722493"
+            },
+            "seriesStartDt": "1750032000000",
+            "seriesEndDt": "1752710400000",
+            "isTimeAnnounced": true,
+            "stateTitle": "Preview",
+            "isFantasyEnabled": true
+          }
+        }, {
+          "matchInfo": {
+            "matchId": 118628,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "2nd T20I",
+            "matchFormat": "T20",
+            "startDate": "1752413400000",
+            "endDate": "1752426000000",
+            "state": "Upcoming",
+            "status": "Match starts at Jul 13, 13:30 GMT",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 13,
+              "ground": "Rangiri Dambulla International Stadium",
+              "city": "Dambulla",
+              "timezone": "+05:30",
+              "latitude": "7.859556",
+              "longitude": "80.634026"
+            },
+            "seriesStartDt": "1750032000000",
+            "seriesEndDt": "1752710400000",
+            "isTimeAnnounced": true,
+            "stateTitle": "Upcoming Match"
+          }
+        }, {
+          "matchInfo": {
+            "matchId": 118637,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "3rd T20I",
+            "matchFormat": "T20",
+            "startDate": "1752672600000",
+            "endDate": "1752685200000",
+            "state": "Upcoming",
+            "status": "Match starts at Jul 16, 13:30 GMT",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 15,
+              "ground": "R.Premadasa Stadium",
+              "city": "Colombo",
+              "timezone": "+05:30",
+              "latitude": "6.939966",
+              "longitude": "79.872222"
+            },
+            "seriesStartDt": "175003
+International.js:58 {
+  "typeMatches": [{
+    "matchType": "International",
+    "seriesMatches": [{
+      "seriesAdWrapper": {
+        "seriesId": 8786,
+        "seriesName": "India tour of England, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 105772,
+            "seriesId": 8786,
+            "seriesName": "India tour of England, 2025",
+            "matchDesc": "3rd Test",
+            "matchFormat": "TEST",
+            "startDate": "1752141600000",
+            "endDate": "1752512400000",
+            "state": "Preview",
+            "status": "Match starts at Jul 10, 10:00 GMT",
+            "team1": {
+              "teamId": 9,
+              "teamName": "England",
+              "teamSName": "ENG",
+              "imageId": 172123
+            },
+            "team2": {
+              "teamId": 2,
+              "teamName": "India",
+              "teamSName": "IND",
+              "imageId": 719031
+            },
+            "venueInfo": {
+              "id": 19,
+              "ground": "Lord\u0027s",
+              "city": "London",
+              "timezone": "+01:00",
+              "latitude": "51.529488",
+              "longitude": "-0.172926"
+            },
+            "seriesStartDt": "1750291200000",
+            "seriesEndDt": "1754352000000",
+            "isTimeAnnounced": true,
+            "stateTitle": "Preview"
+          }
+        }]
+      }
+    }, {
+      "seriesAdWrapper": {
+        "seriesId": 9809,
+        "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 118619,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "1st T20I",
+            "matchFormat": "T20",
+            "startDate": "1752154200000",
+            "endDate": "1752166800000",
+            "state": "Preview",
+            "status": "Match starts at Jul 10, 13:30 GMT",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 254,
+              "ground": "Pallekele International Cricket Stadium",
+              "city": "Pallekele",
+              "timezone": "+05:30",
+              "latitude": "7.280691",
+              "longitude": "80.722493"
+            },
+            "seriesStartDt": "1750032000000",
+            "seriesEndDt": "1752710400000",
+            "isTimeAnnounced": true,
+            "stateTitle": "Preview",
+            "isFantasyEnabled": true
+          }
+        }, {
+          "matchInfo": {
+            "matchId": 118628,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "2nd T20I",
+            "matchFormat": "T20",
+            "startDate": "1752413400000",
+            "endDate": "1752426000000",
+            "state": "Upcoming",
+            "status": "Match starts at Jul 13, 13:30 GMT",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 13,
+              "ground": "Rangiri Dambulla International Stadium",
+              "city": "Dambulla",
+              "timezone": "+05:30",
+              "latitude": "7.859556",
+              "longitude": "80.634026"
+            },
+            "seriesStartDt": "1750032000000",
+            "seriesEndDt": "1752710400000",
+            "isTimeAnnounced": true,
+            "stateTitle": "Upcoming Match"
+          }
+        }, {
+          "matchInfo": {
+            "matchId": 118637,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "3rd T20I",
+            "matchFormat": "T20",
+            "startDate": "1752672600000",
+            "endDate": "1752685200000",
+            "state": "Upcoming",
+            "status": "Match starts at Jul 16, 13:30 GMT",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 15,
+              "ground": "R.Premadasa Stadium",
+              "city": "Colombo",
+              "timezone": "+05:30",
+              "latitude": "6.939966",
+              "longitude": "79.872222"
+            },
+            "seriesStartDt": "175003

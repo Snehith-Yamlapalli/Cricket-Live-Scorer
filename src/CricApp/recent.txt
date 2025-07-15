@@ -1,0 +1,334 @@
+react refresh:37 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+International.js:76 {
+  "typeMatches": [{
+    "matchType": "International",
+    "seriesMatches": [{
+      "seriesAdWrapper": {
+        "seriesId": 8786,
+        "seriesName": "India tour of England, 2025",
+        "matches": [
+            {
+          "matchInfo": {
+            "matchId": 105770,
+            "seriesId": 8786,
+            "seriesName": "India tour of England, 2025",
+            "matchDesc": "2nd Test",
+            "matchFormat": "TEST",
+            "startDate": "1751450400000",
+            "endDate": "1751821200000",
+            "state": "Complete",
+            "status": "India won by 336 runs",
+            "team1": {
+              "teamId": 2,
+              "teamName": "India",
+              "teamSName": "IND",
+              "imageId": 719031
+            },
+            "team2": {
+              "teamId": 9,
+              "teamName": "England",
+              "teamSName": "ENG",
+              "imageId": 172123
+            },
+            "venueInfo": {
+              "id": 20,
+              "ground": "Edgbaston",
+              "city": "Birmingham",
+              "timezone": "+01:00",
+              "latitude": "52.455774",
+              "longitude": "-1.902624"
+            },
+            "currBatTeamId": 2,
+            "seriesStartDt": "1750291200000",
+            "seriesEndDt": "1754352000000",
+            "isTimeAnnounced": true,
+            "stateTitle": "IND Won"
+          },
+          "matchScore": {
+            "team1Score": {
+              "inngs1": {
+                "inningsId": 1,
+                "runs": 587,
+                "wickets": 10,
+                "overs": 150.6
+              },
+              "inngs2": {
+                "inningsId": 3,
+                "runs": 427,
+                "wickets": 6,
+                "overs": 82.6
+              }
+            },
+            "team2Score": {
+              "inngs1": {
+                "inningsId": 2,
+                "runs": 407,
+                "wickets": 10,
+                "overs": 89.3
+              },
+              "inngs2": {
+                "inningsId": 4,
+                "runs": 271,
+                "wickets": 10,
+                "overs": 68.1
+              }
+            }
+          }
+        }]
+      }
+    }, {
+      "seriesAdWrapper": {
+        "seriesId": 9809,
+        "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 118610,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "3rd ODI",
+            "matchFormat": "ODI",
+            "startDate": "1751965200000",
+            "endDate": "1751994000000",
+            "state": "Complete",
+            "status": "Sri Lanka won by 99 runs",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 254,
+              "ground": "Pallekele International Cricket Stadium",
+              "city": "Pallekele",
+              "timezone": "+05:30",
+              "latitude": "7.280691",
+              "longitude": "80.722493"
+            },
+            "currBatTeamId": 5,
+            "seriesStartDt": "1750032000000",
+            "seriesEndDt": "1752710400000",
+            "isTimeAnnounced": true,
+            "stateTitle": "SL Won",
+            "isFantasyEnabled": true
+          },
+          "matchScore": {
+            "team1Score": {
+              "inngs1": {
+                "inningsId": 1,
+                "runs": 285,
+                "wickets": 7,
+                "overs": 49.6
+              }
+            },
+            "team2Score": {
+              "inngs1": {
+                "inningsId": 2,
+                "runs": 186,
+                "wickets": 10,
+                "overs": 39.4
+              }
+            }
+          }
+        }, {
+          "matchInfo": {
+            "matchId": 118604,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "2nd ODI",
+            "matchFormat": "ODI",
+            "startDate": "1751706000000",
+            "endDate": "1751734800000",
+            "state": "Complete",
+            "status": "Bangladesh won by 16 runs",
+            "team1": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "team2": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "venueInfo": {
+              "id": 15,
+              "ground": "R.Premadasa Stadium",
+              "city": "Colombo",
+              "timezone": "+05:30",
+              "latitude": "6.939966",
+              "longitude": "79
+International.js:76 {
+  "typeMatches": [{
+    "matchType": "International",
+    "seriesMatches": [{
+      "seriesAdWrapper": {
+        "seriesId": 8786,
+        "seriesName": "India tour of England, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 105770,
+            "seriesId": 8786,
+            "seriesName": "India tour of England, 2025",
+            "matchDesc": "2nd Test",
+            "matchFormat": "TEST",
+            "startDate": "1751450400000",
+            "endDate": "1751821200000",
+            "state": "Complete",
+            "status": "India won by 336 runs",
+            "team1": {
+              "teamId": 2,
+              "teamName": "India",
+              "teamSName": "IND",
+              "imageId": 719031
+            },
+            "team2": {
+              "teamId": 9,
+              "teamName": "England",
+              "teamSName": "ENG",
+              "imageId": 172123
+            },
+            "venueInfo": {
+              "id": 20,
+              "ground": "Edgbaston",
+              "city": "Birmingham",
+              "timezone": "+01:00",
+              "latitude": "52.455774",
+              "longitude": "-1.902624"
+            },
+            "currBatTeamId": 2,
+            "seriesStartDt": "1750291200000",
+            "seriesEndDt": "1754352000000",
+            "isTimeAnnounced": true,
+            "stateTitle": "IND Won"
+          },
+          "matchScore": {
+            "team1Score": {
+              "inngs1": {
+                "inningsId": 1,
+                "runs": 587,
+                "wickets": 10,
+                "overs": 150.6
+              },
+              "inngs2": {
+                "inningsId": 3,
+                "runs": 427,
+                "wickets": 6,
+                "overs": 82.6
+              }
+            },
+            "team2Score": {
+              "inngs1": {
+                "inningsId": 2,
+                "runs": 407,
+                "wickets": 10,
+                "overs": 89.3
+              },
+              "inngs2": {
+                "inningsId": 4,
+                "runs": 271,
+                "wickets": 10,
+                "overs": 68.1
+              }
+            }
+          }
+        }]
+      }
+    }, {
+      "seriesAdWrapper": {
+        "seriesId": 9809,
+        "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+        "matches": [{
+          "matchInfo": {
+            "matchId": 118610,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "3rd ODI",
+            "matchFormat": "ODI",
+            "startDate": "1751965200000",
+            "endDate": "1751994000000",
+            "state": "Complete",
+            "status": "Sri Lanka won by 99 runs",
+            "team1": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "team2": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "venueInfo": {
+              "id": 254,
+              "ground": "Pallekele International Cricket Stadium",
+              "city": "Pallekele",
+              "timezone": "+05:30",
+              "latitude": "7.280691",
+              "longitude": "80.722493"
+            },
+            "currBatTeamId": 5,
+            "seriesStartDt": "1750032000000",
+            "seriesEndDt": "1752710400000",
+            "isTimeAnnounced": true,
+            "stateTitle": "SL Won",
+            "isFantasyEnabled": true
+          },
+          "matchScore": {
+            "team1Score": {
+              "inngs1": {
+                "inningsId": 1,
+                "runs": 285,
+                "wickets": 7,
+                "overs": 49.6
+              }
+            },
+            "team2Score": {
+              "inngs1": {
+                "inningsId": 2,
+                "runs": 186,
+                "wickets": 10,
+                "overs": 39.4
+              }
+            }
+          }
+        }, {
+          "matchInfo": {
+            "matchId": 118604,
+            "seriesId": 9809,
+            "seriesName": "Bangladesh tour of Sri Lanka, 2025",
+            "matchDesc": "2nd ODI",
+            "matchFormat": "ODI",
+            "startDate": "1751706000000",
+            "endDate": "1751734800000",
+            "state": "Complete",
+            "status": "Bangladesh won by 16 runs",
+            "team1": {
+              "teamId": 6,
+              "teamName": "Bangladesh",
+              "teamSName": "BAN",
+              "imageId": 172120
+            },
+            "team2": {
+              "teamId": 5,
+              "teamName": "Sri Lanka",
+              "teamSName": "SL",
+              "imageId": 172119
+            },
+            "venueInfo": {
+              "id": 15,
+              "ground": "R.Premadasa Stadium",
+              "city": "Colombo",
+              "timezone": "+05:30",
+              "latitude": "6.939966",
+              "longitude": "79
