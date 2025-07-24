@@ -53,8 +53,6 @@ export default function LiveScore() {
                 </tbody>
             </table>
 
-            <button className="btn btn-primary" style={{ position: 'absolute', left: '1300px', top: '30px' }} onClick={gotoHome}> Home </button>
-
             {/* Innings 1 Batsmen */}
             <h4>Batsmen</h4>
             <table className="table table-striped table-sm">
