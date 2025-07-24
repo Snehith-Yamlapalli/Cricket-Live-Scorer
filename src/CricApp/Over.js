@@ -7,12 +7,14 @@ export default function Over() {
     const userId = auth.currentUser.uid;
 
   const navigate = useNavigate();
-  const { hostteam, visitteam } = useLocation().state || {};
+  const { hostteam, visitteam ,timestamp} = useLocation().state || {};
   const firebaserealtimedb = firebase.database();
   const [fbruns, setfbruns] = useState(0);
   const [sbruns, setsbruns] = useState(0);
 
-  const matchid = `${hostteam}vs${visitteam}`;
+  const slug = `${hostteam}vs${visitteam}`;
+  const matchid   = `${userId}_${slug}_${timestamp}`;
+  console.log({timestamp},"In over")
   
   useEffect(() => {
     // First innings runs
@@ -58,7 +60,6 @@ export default function Over() {
           <h2>{hostteam}{'   '}vs{'   '}{visitteam}</h2>
           <h2>{result}</h2>
          <input type="button" className="btn btn-primary mb-4" value="Scorecard" onClick={scores}/> <br />
-         <input type="button" className="btn btn-primary" value='HomePage' onClick={GotoHome} />
     </div>
     </div>
     </div>

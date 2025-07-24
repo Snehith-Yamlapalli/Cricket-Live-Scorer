@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function NBB() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler,timestamp, tag, newteamovers, teamruns } = location.state || {};
   const [newstriker, setnewstriker] = useState()
   const [newnonstriker, setnewnonstriker] = useState()
   const [bowler, setnewbowler] = useState('');
@@ -17,7 +17,7 @@ export default function NBB() {
       alert('innnigs over')
       const newteamruns = teamruns
       navigate('/BBL', {
-        state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
+        state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag, newteamruns }
       })
     }
   },);
@@ -30,7 +30,7 @@ export default function NBB() {
         return;
       }
       navigate('/scorecard', {
-        state: { innings, hostteam, visitteam, overs, striker: stcandidate, nonstriker, bowler, tag: !tag, bowlerballs: newBowlerBalls, teamruns: newteamruns }
+        state: { innings, hostteam, visitteam, overs, striker: stcandidate, nonstriker, bowler,timestamp, tag: !tag, bowlerballs: newBowlerBalls, teamruns: newteamruns }
       });
     }
     else {
@@ -41,7 +41,7 @@ export default function NBB() {
       }
       navigate('/scorecard', {
         state: {
-          innings, hostteam, visitteam, overs, striker, nonstriker: nstcandidate, bowler, tag: !tag, bowlerballs: newBowlerBalls, teamruns
+          innings, hostteam, visitteam, overs, striker, nonstriker: nstcandidate, bowler,timestamp, tag: !tag, bowlerballs: newBowlerBalls, teamruns
         }
       });
     }

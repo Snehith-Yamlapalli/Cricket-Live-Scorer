@@ -1,12 +1,14 @@
 import { React, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import firebase from './firebase';
+import { auth } from '../components/firebase';
 
 export default function Scorecard() {
   const navigate = useNavigate();
+  const userId = auth.currentUser.uid;
   const firebaserealtimedb = firebase.database()
   const location = useLocation();
-  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: incomingTag, bowlerballs: newBowlerBalls, teamruns: newteamruns, thisover: standbyover } = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag: incomingTag, bowlerballs: newBowlerBalls, teamruns: newteamruns, thisover: standbyover } = location.state || {};
 
   var [strikerruns, setstrikerruns] = useState(0)
   var [strikerballs, setstrikerballs] = useState(0)
@@ -17,6 +19,7 @@ export default function Scorecard() {
   const [nonstrikerballs, setnonstrikerballs] = useState(0)
   const [nonstrikerfours, setnonstrikerfours] = useState(0)
   const [nonstrikersixes, setnonstrikersixes] = useState(0)
+  const [timeid,settimeid] = useState()
 
   const [bowlerballs, setbowerballs] = useState(newBowlerBalls ?? 0)
   const [bowlerovers, setbowlerovers] = useState(0)
@@ -50,17 +53,27 @@ export default function Scorecard() {
   ]);
 
   const Key = `Innings${innings}`
-  const matchid = hostteam + 'vs' + visitteam
+  const slug = `${hostteam}vs${visitteam}`;
+  const matchid   = `${userId}_${slug}_${timestamp}`;
 
   function swapbatsman() {
     settag(prev => !prev)
   }
   useEffect(() => {
-    if (innings === 2 && teamruns > targetruns + 1) {
+    if(innings===1 && Teamovers===0)
+    {
+      settimeid(timestamp)
+    }
+    if (innings === 2 && teamruns > targetruns + 1) 
+      {
+        console.log("finished",{timestamp},{timeid})
       alert('Match Finished');
-      navigate('/Over', { state: { hostteam, visitteam } });
+      navigate('/Over', { state: { hostteam, visitteam ,timestamp} });
     }
   }, [innings, teamruns, targetruns, hostteam, visitteam, navigate]);
+
+
+  // For target Runs
   useEffect(() => {
     firebaserealtimedb
       .ref(`${matchid}/${'Innings1'}/Totalteamruns`)
@@ -162,6 +175,7 @@ export default function Scorecard() {
           striker: striker,
           nonstriker: nonstriker,
           bowler:bowler,
+          
           teamname: innings===1?hostteam:visitteam
         },
 
@@ -201,11 +215,11 @@ export default function Scorecard() {
         setTeamovers(newteamovers)
         if (val % 2 === 0)
           navigate('/newbowler', {
-            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamovers, teamruns }
+            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag, newteamovers, teamruns }
           })
         else
           navigate('/newbowler', {
-            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag, newteamovers, teamruns }
+            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag: !tag, newteamovers, teamruns }
           })
       }
     }
@@ -261,6 +275,14 @@ export default function Scorecard() {
         fours: strikerfours + ((tag && runcount) && val === 4 ? 1 : 0),
         sixes: strikersixes + ((tag && runcount) && val === 6 ? 1 : 0)
       },
+      [`Current/`]: {
+          innings:innings,
+          striker: striker,
+          nonstriker: nonstriker,
+          bowler:bowler,
+          
+          teamname: innings===1?hostteam:visitteam
+        },
       [`${Key}/batsmen/${nonstriker}`]: {
         runs: nonstrikerruns + ((!tag && runcount) ? runs : 0),
         balls: nonstrikerballs + ((!tag && (ballcount || selected.includes('NB'))) ? 1 : 0),
@@ -325,11 +347,11 @@ export default function Scorecard() {
       const newteamovers = prevteamovers + 1
       if (val % 2 === 0)
         navigate('/NBB', {
-          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamovers, teamruns, bowlerovers }
+          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag, newteamovers, teamruns, bowlerovers }
         })
       else
         navigate('/NBB', {
-          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag, newteamovers, teamruns, bowlerovers }
+          state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag: !tag, newteamovers, teamruns, bowlerovers }
         })
     }
     setSelected([])

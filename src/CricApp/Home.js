@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import firebase from './firebase';
 import { auth } from '../components/firebase';
 
@@ -17,9 +17,6 @@ export default function Home()
   const [tossDecision, setTossDecision] = useState('');
   const innings = 1;
 
-  useEffect(()=>{
-    console.log(userId)
-    },[userId])
 
   function Startmatch() 
   {
@@ -29,34 +26,44 @@ export default function Home()
       alert('Number of overs must be between 1 and 20');
       return;
     }
-    const firstBattingTeam  = tossDecision === 'Batting' ? tossWinner: (tossWinner === hostteam ? visitteam : hostteam);
-    const secondBattingTeam = firstBattingTeam === hostteam ? visitteam : hostteam;
-
-    const updates = {
-      Admin:userId,
-      INFO: {
-        MatchBetween: `${firstBattingTeam} vs ${secondBattingTeam}`,
-        TossWinner: tossWinner,
-        TossLooser:tossLooser,
-        ChooseTo: tossDecision,   
-        NoOfOvers: parsedOver
-      }
-    };
-    const matchid = firstBattingTeam + 'vs' + secondBattingTeam
-    firebaserealtimedb
-      .ref(matchid)
-      .update(updates)
-
     if (!hostteam || !visitteam || !overs || !tossWinner || !tossDecision) {
       alert('Please fill all fields and make your toss decision');
       return;
     }
-    
 
-    
+    const firstBattingTeam  = tossDecision === 'Batting' ? tossWinner
+                             : (tossWinner === hostteam ? visitteam : hostteam);
+  const secondBattingTeam = firstBattingTeam === hostteam ? visitteam : hostteam;
+  const slug              = `${firstBattingTeam}vs${secondBattingTeam}`;
+
+  // 3️⃣ include your user and a timestamp
+  const timestamp = Date.now();  // ms since epoch; or use new Date().toISOString()
+  const matchId   = `${userId}_${slug}_${timestamp}`;
+  // e.g. "alice_RCBvsKKR_1627156800000"
+
+  // 4️⃣ prepare your payload
+  const updates = {
+    Admin: userId,
+    INFO: {
+      MatchBetween: slug.replace('vs', ' vs '),
+      TossWinner:   tossWinner,
+      TossLooser:   tossLooser,
+      ChooseTo:     tossDecision,
+      NoOfOvers:    parseInt(overs, 10)
+    },
+    Slug: slug,
+    CreatedAt: timestamp
+  };
+
+  // 5️⃣ write under that unique key
+  firebaserealtimedb
+    .ref(matchId)
+    .set(updates)
+    .then(() => console.log('Match stored with ID:', matchId))
+    .catch(err => console.error(err));
     
     navigate('/BBL', {
-      state: { innings, hostteam:  firstBattingTeam, visitteam: secondBattingTeam, overs: parsedOver }
+      state: { innings, hostteam:  firstBattingTeam, visitteam: secondBattingTeam, overs: parsedOver,timestamp }
     });
   }
   return (

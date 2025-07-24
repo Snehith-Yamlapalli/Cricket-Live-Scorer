@@ -4,16 +4,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function NewBowler() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler, tag, newteamovers, teamruns } = location.state || {};
+    const { innings, hostteam, visitteam, overs, striker, nonstriker, oldbowler,timestamp, tag, newteamovers, teamruns } = location.state || {};
     const [bowler, setnewbowler] = useState('');
     useEffect(() => {
-
+        // console.log({timestamp},{hostteam},{innings},{visitteam},{overs},{striker},{nonstriker},{oldbowler},{tag},{newteamovers},{teamruns})
         if (newteamovers === overs && innings===1) {
             const newinnings = 2
             alert('innnigs over')
             const newteamruns = teamruns
             navigate('/BBL', {
-                state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, newteamruns }
+                state: { innings: newinnings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag, newteamruns }
             })
         }else if(newteamovers === overs && innings===2)
         {
@@ -28,7 +28,7 @@ export default function NewBowler() {
             return;
         }
         navigate('/scorecard', {
-            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag: !tag }
+            state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag: !tag }
         });
     }
     return (

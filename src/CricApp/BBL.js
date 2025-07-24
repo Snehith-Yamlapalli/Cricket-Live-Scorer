@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function BBL() {
   const { state = {} } = useLocation();
-  const { innings, hostteam, visitteam, overs } = state;
+  const { innings, hostteam, visitteam, overs ,timestamp} = state;
 
   const [striker, setStriker] = useState('');
   const [nonstriker, setNonstriker] = useState('');
@@ -17,7 +17,7 @@ export default function BBL() {
       return;
     }
     navigate('/scorecard', {
-      state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler }
+      state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp }
     });
   }
 
