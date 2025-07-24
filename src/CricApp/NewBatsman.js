@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function NewBatsman() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns,thisover,selected,runs} = location.state || {};
+  const { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag, bowlerballs, teamruns,thisover,selected,runs} = location.state || {};
   const [newstriker, setnewstriker] = useState()
   const [newnonstriker, setnewnonstriker] = useState()
   const newBowlerBalls = bowlerballs + 1
@@ -19,7 +19,7 @@ export default function NewBatsman() {
         return;
       }thisover.push(`${runs}${[...selected].join('')}`);
       navigate('/scorecard', {
-        state: { innings, hostteam, visitteam, overs, striker: stcandidate, nonstriker, bowler, tag: tag, bowlerballs: newBowlerBalls, teamruns: newteamruns,thisover }
+        state: { innings, hostteam, visitteam, overs, striker: stcandidate, nonstriker, bowler,timestamp ,tag: tag, bowlerballs: newBowlerBalls, teamruns: newteamruns,thisover }
       });
     }
     else {
@@ -30,7 +30,7 @@ export default function NewBatsman() {
         return;
       }
       navigate('/scorecard', {
-        state: { innings, hostteam, visitteam, overs, striker, nonstriker: nstcandidate, bowler, tag: tag, bowlerballs: newBowlerBalls, teamruns ,thisover
+        state: { innings, hostteam, visitteam, overs, striker, nonstriker: nstcandidate, bowler, timestamp,tag: tag, bowlerballs: newBowlerBalls, teamruns ,thisover
         }
       });
     }

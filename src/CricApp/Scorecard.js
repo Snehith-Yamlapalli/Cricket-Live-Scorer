@@ -316,7 +316,7 @@ export default function Scorecard() {
         .update(updates)
         .catch(err => console.error(err))
       navigate('/NewBatsman', {
-        state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler, tag, bowlerballs, teamruns, thisover, selected, runs }
+        state: { innings, hostteam, visitteam, overs, striker, nonstriker, bowler,timestamp, tag, bowlerballs, teamruns, thisover, selected, runs }
       })
     }
     else if (newBowlerBalls === 6 && !selected.includes('W')) {
