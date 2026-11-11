@@ -37,28 +37,29 @@ const Home = () => {
   return (
     <div>
       {userDetails ? (
-        <div className="container-fluid">
-          <div className="row bg-warning p-3 mb-3 align-items-center justify-content-between">
+        <div className="app-header">
+          <div className="container">
+          <div className="row py-3 align-items-center justify-content-between">
 
             <div className="col-6 col-md-auto">
-              <h2 className="mb-0">Welcome</h2>
-              <p className="mb-0" style={{ fontSize: '14px' }}>Email: {userDetails.email}</p>
+              <div className="app-eyebrow">CRICKET LIVE SCORER</div>
+              <p className="mb-0 app-user">Signed in as {userDetails.email}</p>
             </div>
 
             <div className="col-12 col-md-auto text-center mt-3 mt-md-0">
-              <h1 className="mb-0">Cric App</h1>
+              <h1 className="mb-0 app-brand">Cric<span>App</span></h1>
             </div>
             <div className="col-12 col-md-auto text-end mt-3 mt-md-0">
               {isBase
-                ? <button className="btn btn-primary" onClick={logout}>
+                ? <button className="btn app-nav-button" onClick={logout}>
                   Logout
                 </button>
-                : <button className="btn btn-primary" onClick={goHome}>
+                : <button className="btn app-nav-button" onClick={goHome}>
                   Home
                 </button>
               }
             </div>
-          </div>
+          </div></div>
         </div>
 
       ) : (

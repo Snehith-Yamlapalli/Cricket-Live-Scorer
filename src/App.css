@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+.app-header { background: #071b1b; color: #f5f1e8; box-shadow: 0 2px 13px rgba(4, 24, 23, .18); }
+.app-eyebrow { color: #c7ff4c; font-size: .68rem; font-weight: 800; letter-spacing: .14em; }
+.app-user { color: #c5d3ce; font-size: .78rem; }
+.app-brand { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.65rem, 4vw, 2.2rem); letter-spacing: -.05em; }
+.app-brand span { color: #c7ff4c; }
+.app-nav-button { background: transparent; border: 1px solid rgba(199,255,76,.7); border-radius: 999px; color: #f5f1e8; font-weight: 700; padding: .45rem 1rem; }
+.app-nav-button:hover { background: #c7ff4c; color: #071b1b; }
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

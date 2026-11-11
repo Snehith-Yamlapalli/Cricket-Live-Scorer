@@ -10,18 +10,17 @@ export default function History() {
   useEffect(() => {
     if (!userId) return;
 
-    // Query the root for all children whose Admin === current user
+    // New matches are stored beneath a dedicated collection and own their data.
     const dbQuery = firebase
       .database()
-      .ref()                                 // point at the root
-      .orderByChild('Admin')               // look at each child’s "Admin" field
+      .ref('matches')
+      .orderByChild('ownerId')
       .equalTo(userId);                    // only keep those equal to current uid
 
     const handleValue = snapshot => {
       const data = snapshot.val() || {};
       const list = Object.entries(data).map(([matchId, matchObj]) => {
-        // Pull the display name out of INFO.MatchBetween if it exists
-        const name = matchObj.INFO?.MatchBetween || matchId;
+        const name = `${matchObj.teams?.home || 'Home'} vs ${matchObj.teams?.away || 'Away'}`;
         return { id: matchId, name };
       });
       setMatches(list);
@@ -48,8 +47,8 @@ export default function History() {
               className="list-group-item d-flex justify-content-between align-items-center"
             >
               <h4>{name}</h4>
-              <Link to={`/livescoreCard/${id}`} className="btn btn-primary">
-                Go to ScoreCard
+              <Link to={`/scorecard/${id}`} className="btn btn-primary">
+                Resume Match
               </Link>
             </li>
           ))}
